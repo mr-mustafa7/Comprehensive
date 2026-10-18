@@ -60,6 +60,66 @@ synthetic report and approved regimen to the existing `src/claude_cli.py` adapte
 stored. A transport or parse failure produces `analysis_incomplete`, never a clean
 result.
 
+## Deploy the synthetic demo to Vercel
+
+The repository supports Vercel's **Flask** preset with persistent PostgreSQL
+storage. This prepares a public hackathon demo; it does not make the application
+ready for clinical use. Demo account credentials are public and every record must
+remain fictional.
+
+1. Push this version of the repository to GitHub and import it into Vercel.
+   Choose **Flask**, root directory **`./`**, and leave install/output overrides
+   unset. The checked-in `vercel.json` runs `python scripts/build_vercel.py`, which
+   copies assets to `public/static`; root `app.py` exports the Flask application.
+2. Add a PostgreSQL database through the [Vercel Marketplace](https://vercel.com/docs/postgres),
+   such as **Neon**. Connect it to this project and use the provider's **pooled**
+   PostgreSQL connection URL, including its TLS parameters (for example,
+   `sslmode=require`). If the integration uses a different variable name, add the
+   same connection URL as `DATABASE_URL`.
+3. In **Project Settings → Environment Variables**, set the following values for
+   the deployment environment. Use separate databases or provider branches for
+   Preview and Production so test deployments cannot change the live demo.
+
+   | Variable | Value |
+   |---|---|
+   | `DATABASE_URL` | Your pooled PostgreSQL URL; keep it secret |
+   | `COMPREHENSIVE_SECRET_KEY` | A persistent, randomly generated secret of at least 32 characters |
+   | `COMPREHENSIVE_SEED_DEMO` | `1` to create the fictional demonstration accounts and records |
+   | `COMPREHENSIVE_USAGE_MODEL` | `rules` |
+   | `COMPREHENSIVE_DOCUMENT_SUMMARY_MODEL` | `structured` |
+
+   Generate the secret locally with
+   `python3 -c 'import secrets; print(secrets.token_hex(32))'`, then paste its
+   output into Vercel. Keep the same value across redeployments to preserve
+   signed sessions. Never commit database URLs, secrets, or an actual `.env` file.
+   [.env.example](.env.example) lists the settings; the app reads process
+   environment variables and does not automatically load that file.
+4. Deploy, or **Redeploy** after changing environment variables. On the first
+   request the app creates its database tables and, when explicitly enabled,
+   seeds the demo idempotently. Existing reports remain stored in PostgreSQL
+   through subsequent deploys. This starts a new database; it does **not** import
+   an existing local `outputs/review.db`.
+5. Open `/login`, confirm styles load, and complete the **Demo journey** below
+   using the seeded accounts. Submit a report, review it, approve a wording
+   suggestion, then reload and sign in again to confirm the history persists.
+   Redeploy once and verify the same report still exists before sharing the URL.
+
+Missing PostgreSQL configuration or a suitable secret stops Vercel startup with a
+configuration error rather than falling back to temporary storage or a new session
+secret. If login has no demo accounts, check `COMPREHENSIVE_SEED_DEMO=1`, database
+connectivity, and Vercel function logs. Setting the seed flag to `0` later stops
+seeding; it does not remove accounts already created.
+
+The Vercel demo runs deterministic usage checks and structured document summaries.
+The local Claude CLI login does not transfer to a deployment, and Claude providers
+are rejected on Vercel. Local development continues to use SQLite when
+`DATABASE_URL` is unset and seeds synthetic demo data by default. Ollama is a
+future integration: it would run on a separate controlled server accessed by the
+backend, not inside the Vercel function or visitors' browsers; `localhost` on
+Vercel does not refer to your computer.
+
+Deployment reference: [Vercel's Flask guide](https://vercel.com/docs/frameworks/backend/flask).
+
 ## Demo journey
 
 1. Sign in as `clinician@demo.test` and open **Alex Morgan**.
@@ -88,7 +148,8 @@ patients completing supervised follow-up. A credible buyer is an NHS trust or it
 medication/discharge-software supplier purchasing a governed communication and
 assurance workflow—not an autonomous prescribing tool.
 
-The implementation deliberately retains Flask and SQLite:
+The implementation uses Flask with SQLite locally and PostgreSQL when
+`DATABASE_URL` is configured:
 
 ```text
 Patient report
@@ -102,11 +163,10 @@ Patient report
 ```
 
 - `webapp/app.py` retains the original Flask routes and registers the new workflow.
-- `webapp/clinical_store.py` adds normalised, foreign-keyed domain tables to the
-  existing SQLite database. Queries are kept out of templates/routes so a later
-  PostgreSQL repository adapter is straightforward.
-- `webapp/security.py` provides server-side sessions, role decorators, CSRF checks,
-  secure Werkzeug password hashes, and session-cookie settings.
+- `webapp/clinical_store.py` manages normalised, foreign-keyed domain tables through
+  a shared SQLite/PostgreSQL database adapter. Queries stay out of templates/routes.
+- `webapp/security.py` provides signed Flask cookie sessions, role decorators, CSRF
+  checks, secure Werkzeug password hashes, and session-cookie settings.
 - `src/usage_assessment.py` separates deterministic checks from the swappable
   inference adapter. It never invents or changes an instruction.
 - `src/document_feedback.py` creates a clinician-review-only supplementary wording

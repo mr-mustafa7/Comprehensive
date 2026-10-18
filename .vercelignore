@@ -1,0 +1,11 @@
+.git
+.venv
+venv
+.pytest_cache
+__pycache__
+.env
+.env.*
+*.db
+*.db-shm
+*.db-wal
+pitch

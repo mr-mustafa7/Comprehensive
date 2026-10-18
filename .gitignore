@@ -1,7 +1,13 @@
 .env
+.env.*
+!.env.example
+.vercel/
+public/static/
 __pycache__/
 *.pyc
 .venv/
 venv/
 .DS_Store
 outputs/review.db
+*.db-shm
+*.db-wal

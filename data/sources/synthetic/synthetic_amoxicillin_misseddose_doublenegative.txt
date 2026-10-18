@@ -1,0 +1,90 @@
+*** SYNTHETIC / MODIFIED TEST CASE — NOT A REAL MHRA DOCUMENT ***
+BASE SOURCE: Amoxicillin 250mg Capsules PIL (see data/sources/pil_amoxicillin_250mg_capsules.txt
+for the unmodified original; https://www.medicines.org.uk/emc/product/541/pil, accessed 2026-10-17).
+
+WHAT WAS CHANGED: the "If you forget to take Amoxicillin Capsules" paragraph in section 3 was
+rewritten by the SotonShip 2026 team to be technically defensible but genuinely confusing, combining
+a double negative with relative (not absolute) dosing language and a reversed double-dose instruction.
+Everything else is the real MHRA-approved leaflet text, unmodified.
+
+ORIGINAL TEXT: "If you forget to take a dose, take it as soon as you remember. Do not take the next
+dose too soon, wait about 4 hours before taking the next dose. Do not take a double dose to make up
+for a forgotten dose."
+MODIFIED TEXT (planted risk): "If you miss a dose, don't not take it — but avoid taking your next
+dose any less than half the normal interval after that, and never skip doubling up if you've missed
+more than one in a row."
+PLANTED RISK TYPE: double negation ("don't not take it") + relative/implicit dosing language ("half
+the normal interval" instead of a stated time) + a reversed double-dose instruction that sounds like
+it endorses doubling up, the opposite of the real "do not take a double dose" guidance.
+GROUND TRUTH LABEL: contains_planted_misunderstanding = TRUE; risk_type = double_negative_and_reversed_instruction
+
+This file is synthetic/modified test data created for the SotonShip 2026 hackathon (Responsible AI
+track) to evaluate a comprehension-gap checker. It does not represent real patient guidance and must
+not be used as medical advice.
+---
+
+Amoxicillin 250mg and 500mg Capsules
+
+PACKAGE LEAFLET: INFORMATION FOR THE USER
+
+Amoxicillin 250mg Capsules
+Amoxicillin 500mg Capsules
+amoxicillin
+
+Read all of this leaflet carefully before you start taking this medicine.
+Keep this leaflet. You may need to read it again.
+If you have any further questions, ask your doctor or pharmacist.
+This medicine has been prescribed for you only. Do not pass it on to others. It may harm them, even if their signs of illness are the same as yours.
+If you get any side effects, talk to your doctor or pharmacist. This includes any possible side effects not listed in this leaflet. See section 4
+
+1. WHAT AMOXICILLIN CAPSULES ARE AND WHAT THEY ARE USED FOR
+
+Amoxicillin Capsules contain amoxicillin as the active ingredient which belongs to a group of medicines called 'penicillins'.
+
+Amoxicillin Capsules are used to treat infections caused by bacteria in different parts of the body.
+
+2. WHAT YOU NEED TO KNOW BEFORE YOU TAKE AMOXICILLIN CAPSULES
+
+Do not take Amoxicillin Capsules if you are allergic to amoxicillin, penicillin or any of the other ingredients of this medicine, or if you have ever had an allergic reaction to any antibiotic.
+
+Talk to your doctor or pharmacist before taking Amoxicillin Capsules if you have kidney problems, glandular fever, or are not urinating regularly.
+
+3. HOW TO TAKE AMOXICILLIN CAPSULES
+
+Always take this medicine exactly as your doctor or pharmacist has told you. Check with your doctor or pharmacist if you are not sure.
+
+Swallow with water without opening capsule.
+
+Space the doses evenly during the day, at least 4 hours apart.
+
+The usual dose of Amoxicillin for adults is 250 mg to 500 mg three times a day or 750 mg to 1 g every 12 hours, depending on the severity and type of infection.
+
+If you take more Amoxicillin Capsules than you should
+
+If you have taken too much Amoxicillin capsules, signs might be an upset stomach (feeling sick, being sick or diarrhoea) or crystals in the urine, which may be seen as cloudy urine, or problems urinating. Talk to your doctor as soon as possible.
+
+If you forget to take Amoxicillin Capsules
+
+If you miss a dose, don't not take it — but avoid taking your next dose any less than half the normal interval after that, and never skip doubling up if you've missed more than one in a row.
+
+How long should you take amoxicillin for?
+
+Keep taking Amoxicillin for as long as your doctor has told you to, even if you feel better. You need every dose to help fight the infection. If some bacteria survive they can cause the infection to come back.
+
+Once you finish treatment, if you still feel unwell you should go back to see the doctor.
+
+4. POSSIBLE SIDE EFFECTS
+
+Like all medicines, this medicine can cause side effects, although not everyone gets them.
+
+Stop taking Amoxicillin capsules and see a doctor straight away if you notice signs of an allergic reaction, such as skin itching or rash, swelling of the face, lips, tongue, body or breathing difficulties.
+
+Common side effects (may affect up to 1 in 10 people): skin rash, feeling sick (nausea), diarrhoea.
+
+5. HOW TO STORE AMOXICILLIN CAPSULES
+
+Keep this medicine out of the sight and reach of children.
+Do not store above 25°C.
+Use Amoxicillin Capsules before the expiry date shown on the label.
+
+This leaflet was last revised in 02/2025.

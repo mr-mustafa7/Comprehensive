@@ -1,0 +1,40 @@
+[1/12] pil_amoxicillin ...
+    single=True  panel=True (2/5 readers)  planted=FALSE
+[2/12] nhs_antibiotics ...
+    single=False  panel=False (0/5 readers)  planted=FALSE
+[3/12] nhs_paracetamol ...
+    single=False  panel=False (0/5 readers)  planted=FALSE
+[4/12] nhs_ibuprofen ...
+    single=False  panel=False (0/5 readers)  planted=FALSE
+[5/12] synthetic_paracetamol_duration_reversed ...
+    single=True  panel=True (5/5 readers)  planted=TRUE
+[6/12] synthetic_ibuprofen_duration_reversed ...
+    single=True  panel=True (5/5 readers)  planted=TRUE
+[7/12] synthetic_amoxicillin_misseddose ...
+    single=False  panel=True (2/5 readers)  planted=TRUE
+[8/12] synthetic_antibiotics_doubledose ...
+    single=True  panel=True (3/5 readers)  planted=TRUE
+[9/12] synthetic_ibuprofen_nsaid_softened ...
+    single=False  panel=False (0/5 readers)  planted=TRUE
+[10/12] synthetic_amoxicillin_driving_stacked_negation ...
+    single=False  panel=True (2/5 readers)  planted=FALSE
+[11/12] synthetic_amoxicillin_kidney_selfadjust ...
+    single=True  panel=True (1/5 readers)  planted=TRUE
+[12/12] synthetic_amoxicillin_fulltext_buried ...
+    single=False  panel=True (3/5 readers)  planted=TRUE
+
+------------------------------------------------------------------------------------
+Method                Subset     Caught   False alarms  Mean cost   Mean time 
+------------------------------------------------------------------------------------
+single_reader         primary    3/4      1/4           $0.0255     31.7s
+reader_panel          primary    4/4      1/4           $0.1249     33.5s
+readability_baseline  primary    4/4      4/4           $0.0        0.0s
+single_reader         edge_case  1/3      0/1           $0.0241     28.1s
+reader_panel          edge_case  2/3      1/1           $0.1232     30.1s
+readability_baseline  edge_case  3/3      1/1           $0.0        0.0s
+single_reader         all        4/7      1/5           $0.0251     30.5s
+reader_panel          all        6/7      2/5           $0.1243     32.4s
+readability_baseline  all        7/7      5/5           $0.0        0.0s
+------------------------------------------------------------------------------------
+
+n=12 documents (single run each, no retries). Header/answer key stripped before any model call. Written to panel_results.csv, panel_summary.csv, panel_runs.json.

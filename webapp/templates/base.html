@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Comprehension-Gap Checker{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <a class="brand" href="{{ url_for('index') }}">Comprehension-Gap Checker</a>
+    <nav aria-label="Primary">
+      <a class="nav-pill" href="{{ url_for('index') }}" {{ 'aria-current="page"' if active == 'index' else '' }}>Run a document</a>
+      <a class="nav-pill" href="{{ url_for('queue') }}" {{ 'aria-current="page"' if active == 'queue' else '' }}>Review queue{% if pending_count %} <span class="nav-count">{{ pending_count }}</span>{% endif %}</a>
+      <a class="nav-pill" href="{{ url_for('governance') }}" {{ 'aria-current="page"' if active == 'governance' else '' }}>Governance</a>
+      <a class="nav-pill" href="{{ url_for('eval_page') }}" {{ 'aria-current="page"' if active == 'eval' else '' }}>Evaluation results</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="shell">
+  {% block content %}{% endblock %}
+</main>
+
+</body>
+</html>

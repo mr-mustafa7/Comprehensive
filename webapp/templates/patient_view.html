@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Patient view — {{ run.title }} — Comprehension-Gap Checker{% endblock %}
+{% block content %}
+
+<a class="back-link" href="{{ url_for('run_page', run_id=run.id) }}">← Back to run #{{ run.id }}</a>
+
+<div class="doc-header">
+  <h1>What the patient sees</h1>
+  <div class="source">{{ run.title }} · {{ run.source_url }}</div>
+  {% if run.is_synthetic == 'TRUE' %}
+    <div class="synthetic-banner">⚠ SYNTHETIC / MODIFIED TEST CASE — not a real patient document</div>
+  {% endif %}
+</div>
+
+<div class="leak-notice" style="border-color: var(--rule); background: var(--surface-raised); color: var(--ink-muted);">
+  <strong style="color: var(--ink);">Illustrative view, not a live product.</strong> This page reconstructs what a
+  patient would eventually be shown, from this run's own stored data — no patient, real or simulated, ever sees this
+  tool directly. Nothing here is sent anywhere; it is rendered on request from the reviewed text already in this
+  run's record.
+</div>
+
+{% if view.state == 'not_ready' %}
+
+<div class="step-card">
+  <div class="body">
+    <p class="note">This document hasn't been through review yet, so there is nothing to show a patient —
+    a flag isn't a verdict, and nothing is shared until a named reviewer confirms, dismisses, or corrects it.</p>
+    {% if view.flagged_phrases %}
+    <p class="note">What's waiting for review:</p>
+    <ul>
+      {% for phrase in view.flagged_phrases %}<li><code>{{ phrase }}</code></li>{% endfor %}
+    </ul>
+    {% endif %}
+    <p><a href="{{ url_for('run_page', run_id=run.id) }}#review">Go to review →</a></p>
+  </div>
+</div>
+
+{% else %}
+
+<div class="step-card">
+  <div class="head"><span class="num">✓</span><h2>{{ 'Reviewed and corrected' if run.status == 'edited' else ('Reviewed — no change needed' if run.status == 'dismissed' else 'Never flagged') }}</h2></div>
+  <div class="body">
+    {% if view.reviewer_note %}<p class="note">{{ view.reviewer_note }}</p>{% endif %}
+    {% if view.retest_flagged %}
+    <p class="note" style="color: var(--warning);">⚠ Note: the readers still flagged something in the reviewer's
+    retest — this corrected version has not fully cleared the check. See the full retest on the run page.</p>
+    {% endif %}
+  </div>
+</div>
+
+{% if view.flagged_phrases %}
+<div class="step-card">
+  <div class="head"><span class="num">!</span><h2>What readers originally flagged</h2></div>
+  <div class="body">
+    <ul style="margin: 0; padding-left: 1.2em;">
+      {% for phrase in view.flagged_phrases %}<li style="margin-bottom: 6px;"><code>{{ phrase }}</code></li>{% endfor %}
+    </ul>
+  </div>
+</div>
+{% endif %}
+
+<div class="step-card">
+  <div class="head"><span class="num">§</span><h2>Document as shown to the patient</h2></div>
+  <div class="body">
+    <div class="source-text">{{ view.text }}</div>
+  </div>
+</div>
+
+{% endif %}
+
+{% endblock %}

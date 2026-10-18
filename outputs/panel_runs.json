@@ -1,0 +1,1310 @@
+[
+  {
+    "doc": {
+      "doc_id": "pil_amoxicillin",
+      "title": "Amoxicillin 250mg Capsules (PIL)",
+      "doc_type": "medication_leaflet",
+      "source_path": "data/sources/pil_amoxicillin_250mg_capsules.txt",
+      "source_url": "https://www.medicines.org.uk/emc/product/541/pil",
+      "access_date": "2026-10-17",
+      "is_synthetic": "FALSE",
+      "contains_planted_misunderstanding": "FALSE",
+      "risk_type": "none",
+      "test_set": "primary"
+    },
+    "single": {
+      "paraphrase": "I'm supposed to take the amoxicillin capsules with a glass of water, swallowing them whole, and space the doses about 4 hours apart. I need to keep taking them until they're all finished, even if I start feeling better, because stopping early could let the infection come back. If I forget a dose, I take it when I remember, but I don't take two at once. I should stop and call my doctor right away if I get a rash, swelling of my face or throat, trouble breathing, or repeated vomiting, and I shouldn't drive if I feel dizzy.",
+      "judge": {
+        "flagged": true,
+        "risk_type": "dropped_condition",
+        "severity": 2,
+        "confidence": 0.45,
+        "source_phrase": "Space the doses evenly during the day, at least 4 hours apart.",
+        "explanation": "The reader turned a minimum interval ('at least 4 hours') into a target interval ('about 4 hours apart') and left out 'evenly during the day' and the prescribed dosing frequency. They could take doses every 4 hours, which is more often than the usual three-times-a-day or 12-hourly schedule."
+      },
+      "elapsed_s": 36.19199895858765,
+      "cost_usd": 0.04099772
+    },
+    "panel": {
+      "readers": [
+        {
+          "persona_id": "skimmer",
+          "persona_name": "The skimmer",
+          "persona_description": "Reads quickly between other tasks; picks out headings and numbers.",
+          "paraphrase": "I'm supposed to swallow each capsule whole with a glass of water, and space the doses out so there's about 4 hours between them. I need to keep taking them until the whole course is finished, even if I feel better, because stopping early can let the infection come back. If I miss a dose, I take it when I remember, but I don't take two at once to catch up. I should stop and see a doctor straight away if I get a rash, swelling of my face, lips or throat, trouble breathing, bad diarrhoea, or keep being sick. I also shouldn't drive if I feel dizzy or unwell.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.85,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.035775039999999994
+        },
+        {
+          "persona_id": "limited_literacy",
+          "persona_name": "Limited health literacy",
+          "persona_description": "Finds long sentences and medical words hard; goes with the gist.",
+          "paraphrase": "I'm supposed to swallow the capsules whole with a glass of water, spacing them out about every 4 hours during the day. If I miss one, I take it when I remember, but I don't take two at once to catch up. I need to keep taking them until the whole course is finished, even if I feel better. If I get a rash, swelling in my face or throat, or trouble breathing, I should stop and see a doctor straight away.",
+          "judge": {
+            "flagged": true,
+            "risk_type": "dropped_condition",
+            "severity": 3,
+            "confidence": 0.6,
+            "source_phrase": "Space the doses evenly during the day, at least 4 hours apart.",
+            "explanation": "The reader turned a minimum gap ('at least 4 hours apart') into a dosing schedule ('about every 4 hours'). They also dropped the instruction to take the medicine exactly as the doctor prescribed, which is often 2\u20133 times a day. Following their plan could mean taking about 6 doses a day, more than prescribed."
+          },
+          "cost_usd": 0.03941546
+        },
+        {
+          "persona_id": "second_language",
+          "persona_name": "English as an additional language",
+          "persona_description": "Reads every word carefully and literally; idioms and negations are harder.",
+          "paraphrase": "I think I'm meant to swallow each capsule whole with water and not open it, and take the doses spaced out through the day, about 4 hours apart. I need to keep taking them until the bottle is finished, even if I feel better, because stopping early could let the infection come back. If I forget a dose, I take it when I remember, but I don't take two at once. I should stop and see the doctor straight away if I get an allergy or a bad rash, severe diarrhoea, or keep being sick after a dose.",
+          "judge": {
+            "flagged": true,
+            "risk_type": "dropped_condition",
+            "severity": 2,
+            "confidence": 0.4,
+            "source_phrase": "Keep taking Amoxicillin for as long as your doctor has told you to, even if you feel better.",
+            "explanation": "The reader replaced the doctor's stated duration with 'until the bottle is finished'. If the supply doesn't match the prescribed course, they could take the medicine for the wrong length of time. The risk is small, because the reader did understand not to stop early."
+          },
+          "cost_usd": 0.03978905
+        },
+        {
+          "persona_id": "older_polypharmacy",
+          "persona_name": "Older adult, several medicines",
+          "persona_description": "Takes several medicines already; relies on habits from those.",
+          "paraphrase": "The doctor wants me to swallow the capsules whole with water, not open them, and take them spread out through the day, about 4 hours apart. I should keep taking them until the bottle is finished, even if I feel better, because stopping early could let the infection come back. If I miss a dose, I take it when I remember, but I don't double up. I need to stop and get help right away if I break out in a rash or swell up, or if I'm vomiting over and over or have bad diarrhoea.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.8,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.037768460000000004
+        },
+        {
+          "persona_id": "anxious",
+          "persona_name": "Anxious reader",
+          "persona_description": "Worried about side effects; attention drawn to warnings.",
+          "paraphrase": "I'm supposed to swallow the capsules whole with water and space them out evenly through the day, at least 4 hours apart, and keep taking them for the full course even if I feel better. If I miss one, I take it when I remember, but I don't double up. The scary part is that if I get a rash, swelling of my face or throat, trouble breathing, chest pain, or bad diarrhoea, I have to stop and see a doctor straight away. I also shouldn't drive if I feel dizzy or unwell, and I need to mention my other medicines to the doctor.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.85,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.03701795
+        }
+      ],
+      "elapsed_s": 35.17733693122864,
+      "cost_usd": 0.18976596
+    },
+    "baseline_flagged": true
+  },
+  {
+    "doc": {
+      "doc_id": "nhs_antibiotics",
+      "title": "NHS Antibiotics condition page",
+      "doc_type": "nhs_condition_page",
+      "source_path": "data/sources/nhs_antibiotics.txt",
+      "source_url": "https://www.nhs.uk/conditions/antibiotics/",
+      "access_date": "2026-10-17",
+      "is_synthetic": "FALSE",
+      "contains_planted_misunderstanding": "FALSE",
+      "risk_type": "none",
+      "test_set": "primary"
+    },
+    "single": {
+      "paraphrase": "I think the leaflet is saying antibiotics kill the germs that cause some infections, but not colds, flu, or most coughs, so I should only take them if my doctor or pharmacist says I need them. If I'm given them, I'd take them exactly as the packet says, and if I forget a dose I'd take it when I remember, unless the next one is nearly due, in which case I'd skip it and never take two at once. I'd stop and call 999 or go to A&E straight away if I got a rash, trouble breathing, or any swelling in my face, mouth, or throat. I'd also never share my tablets with anyone, and I'd tell my doctor if I was pregnant or breastfeeding.",
+      "judge": {
+        "flagged": false,
+        "risk_type": "none",
+        "severity": 1,
+        "confidence": 0.9,
+        "source_phrase": "",
+        "explanation": ""
+      },
+      "elapsed_s": 29.781211853027344,
+      "cost_usd": 0.02387245
+    },
+    "panel": {
+      "readers": [
+        {
+          "persona_id": "skimmer",
+          "persona_name": "The skimmer",
+          "persona_description": "Reads quickly between other tasks; picks out headings and numbers.",
+          "paraphrase": "I think I'm supposed to take antibiotics only when my doctor or pharmacist says I need them, since they don't work on colds, flu, or most coughs. If I miss a dose, I should take it as soon as I remember, unless the next one is almost due. I should never take a double dose to catch up, and I shouldn't take anyone else's antibiotics. If I get a rash, wheezing, or swelling in my face or throat, I should call 999 or go to A&E straight away.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.9,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.02351004
+        },
+        {
+          "persona_id": "limited_literacy",
+          "persona_name": "Limited health literacy",
+          "persona_description": "Finds long sentences and medical words hard; goes with the gist.",
+          "paraphrase": "I think I'm supposed to only take antibiotics if my doctor or pharmacist says I need them, because they don't work on colds, flu, or most coughs. If I'm given some, I should take them the way the packet or my doctor says, and if I forget a dose I take it when I remember, unless the next one is nearly due. I shouldn't take two doses to catch up or share them with anyone. If I get a rash, start wheezing, or my face or throat swells, I should call 999 straight away.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.9,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.023980460000000002
+        },
+        {
+          "persona_id": "second_language",
+          "persona_name": "English as an additional language",
+          "persona_description": "Reads every word carefully and literally; idioms and negations are harder.",
+          "paraphrase": "I think I'm supposed to take my antibiotics exactly as the packet or my doctor says. If I forget a dose, I take it when I remember, unless the next dose is almost due, and then I skip the missed one and never take two doses to catch up. I should only take my own medicine, not share it, and not mix it with alcohol. If I get a rash, wheezing, trouble breathing, or my face or throat starts swelling, I must call 999 or go to A&E straight away.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.9,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.023799549999999996
+        },
+        {
+          "persona_id": "older_polypharmacy",
+          "persona_name": "Older adult, several medicines",
+          "persona_description": "Takes several medicines already; relies on habits from those.",
+          "paraphrase": "I'm meant to take the antibiotics exactly as the packet or my doctor says, and if I forget a dose, I take it when I remember unless the next one is nearly due, in which case I skip it and never double up. I shouldn't use them for colds, flu, or a cough, and I should never take someone else's. I need to watch for a bad allergic reaction, like a rash, wheezing, or trouble breathing or swallowing, and if that happens I call 999 straight away. Alcohol and my contraceptive pill don't mix well with them, so I should check with the pharmacist about those.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.85,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.02252346
+        },
+        {
+          "persona_id": "anxious",
+          "persona_name": "Anxious reader",
+          "persona_description": "Worried about side effects; attention drawn to warnings.",
+          "paraphrase": "I think I'm only meant to take antibiotics if my doctor or pharmacist says I need them, because they don't work on colds, flu, or most coughs. If I'm given them, I should take them exactly as the packet says, and if I miss a dose I should take it when I remember unless the next one is almost due, and never take two at once. What scared me most is the allergic reaction: if I get a rash, start wheezing, have trouble breathing, or my face, lips, or throat start to swell, I need to call 999 or go to A&E straight away. I also shouldn't share my tablets with anyone or mix them with alcohol or the pill without checking first.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.9,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.02429345
+        }
+      ],
+      "elapsed_s": 31.080663919448853,
+      "cost_usd": 0.11810696
+    },
+    "baseline_flagged": true
+  },
+  {
+    "doc": {
+      "doc_id": "nhs_paracetamol",
+      "title": "NHS Paracetamol for adults dosing page",
+      "doc_type": "nhs_medicine_page",
+      "source_path": "data/sources/nhs_paracetamol_dosing.txt",
+      "source_url": "https://www.nhs.uk/medicines/paracetamol-for-adults/how-and-when-to-take-paracetamol-for-adults/",
+      "access_date": "2026-10-17",
+      "is_synthetic": "FALSE",
+      "contains_planted_misunderstanding": "FALSE",
+      "risk_type": "none",
+      "test_set": "primary"
+    },
+    "single": {
+      "paraphrase": "I think I'm meant to take paracetamol for my headache or pain, but only for up to 3 days unless a doctor tells me to keep going. I should check the packet for how much to take, and use the smallest amount that works and stop once the pain goes. I shouldn't take any other medicine that has paracetamol in it, like cold and flu tablets, because I could take too much. If I think I've taken too much, I should call 111 right away, and if they tell me to go to A&E, I shouldn't drive myself.",
+      "judge": {
+        "flagged": false,
+        "risk_type": "none",
+        "severity": 1,
+        "confidence": 0.85,
+        "source_phrase": "",
+        "explanation": ""
+      },
+      "elapsed_s": 26.191708087921143,
+      "cost_usd": 0.02048315
+    },
+    "panel": {
+      "readers": [
+        {
+          "persona_id": "skimmer",
+          "persona_name": "The skimmer",
+          "persona_description": "Reads quickly between other tasks; picks out headings and numbers.",
+          "paraphrase": "I think I'm meant to take paracetamol for my headache or temperature, but not for more than 3 days unless a doctor tells me to. I shouldn't take any other cold or flu medicine that has paracetamol in it at the same time, because I could end up with too much. If I take more than the packet says, I should ring 111 straight away, and if they say go to A&E, I shouldn't drive myself. I can have a drink, including alcohol, and it's fine to take ibuprofen too if I need it.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.8,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.023000239999999998
+        },
+        {
+          "persona_id": "limited_literacy",
+          "persona_name": "Limited health literacy",
+          "persona_description": "Finds long sentences and medical words hard; goes with the gist.",
+          "paraphrase": "I think I'm meant to use paracetamol for pain or a fever, but only for about 3 days unless a doctor says otherwise. I shouldn't take any other medicine that has paracetamol in it, like cold and flu tablets, because I could end up with too much. If I think I've taken too much, I should ring 111, and if they tell me to go to A&E, I shouldn't drive myself. I should also look out for a swollen throat, a itchy rash, yellow skin or eyes, or bruising easily, and call 111 if any of those happen.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.85,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.02192866
+        },
+        {
+          "persona_id": "second_language",
+          "persona_name": "English as an additional language",
+          "persona_description": "Reads every word carefully and literally; idioms and negations are harder.",
+          "paraphrase": "I think I can take paracetamol for my headache or cold, but only for up to 3 days unless a doctor tells me to keep going. I shouldn't take it together with other medicines that also have paracetamol in them, like cold and flu tablets, because I could take too much. If I take more than the packet says, I should call 111 straight away, and if they tell me to go to A&E, I shouldn't drive myself. I can drink alcohol while I take it, and I can take ibuprofen too if needed, but I should use the smallest amount that works.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.8,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.02347425
+        },
+        {
+          "persona_id": "older_polypharmacy",
+          "persona_name": "Older adult, several medicines",
+          "persona_description": "Takes several medicines already; relies on habits from those.",
+          "paraphrase": "As I understood it, I can take paracetamol for headaches, aches, or a fever, but I shouldn't keep taking it for more than three days unless my doctor says so. I shouldn't take it together with any other cold or flu medicine that has paracetamol in it, because I could end up with too much. If I think I've taken too much, I should ring 111 straight away, and if they tell me to go to A&E, I shouldn't drive myself. I can take ibuprofen with it if I need to, but I should try each one on its own first and use the smallest amount that works, and I'll ask the pharmacist about my other tablets since I already take several.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.85,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.02246016
+        },
+        {
+          "persona_id": "anxious",
+          "persona_name": "Anxious reader",
+          "persona_description": "Worried about side effects; attention drawn to warnings.",
+          "paraphrase": "I think I'm meant to take paracetamol only for a few days, no more than 3 unless a doctor says otherwise. I shouldn't take any other cold or flu medicine that has paracetamol in it, because I could end up with too much. If I take more than the packet says, I need to ring 111 straight away, and if they send me to A&E I shouldn't drive myself. I'd also call 111 if I notice I'm feeling sick, my skin or eyes turn yellow, or I bruise easily or get nosebleeds.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.9,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.02164265
+        }
+      ],
+      "elapsed_s": 31.664732933044434,
+      "cost_usd": 0.11250595999999999
+    },
+    "baseline_flagged": true
+  },
+  {
+    "doc": {
+      "doc_id": "nhs_ibuprofen",
+      "title": "NHS Ibuprofen for adults dosing page",
+      "doc_type": "nhs_medicine_page",
+      "source_path": "data/sources/nhs_ibuprofen_dosing.txt",
+      "source_url": "https://www.nhs.uk/medicines/ibuprofen-for-adults/",
+      "access_date": "2026-10-17",
+      "is_synthetic": "FALSE",
+      "contains_planted_misunderstanding": "FALSE",
+      "risk_type": "none",
+      "test_set": "primary"
+    },
+    "single": {
+      "paraphrase": "I think I'm meant to take ibuprofen only when I need it for pain, and to use the smallest amount for the shortest time. If I'm using the tablets or capsules, I shouldn't keep going past 10 days unless a doctor tells me to. I shouldn't take it with other painkillers like aspirin or naproxen, and I should go easy on alcohol. If I take too much, or I start getting bad tummy pain, black tar-like poo, swelling, or trouble breathing, I should call 111 straight away.",
+      "judge": {
+        "flagged": false,
+        "risk_type": "none",
+        "severity": 1,
+        "confidence": 0.85,
+        "source_phrase": "",
+        "explanation": ""
+      },
+      "elapsed_s": 31.45077395439148,
+      "cost_usd": 0.02457515
+    },
+    "panel": {
+      "readers": [
+        {
+          "persona_id": "skimmer",
+          "persona_name": "The skimmer",
+          "persona_description": "Reads quickly between other tasks; picks out headings and numbers.",
+          "paraphrase": "I think I'm supposed to use the smallest amount of ibuprofen I need, for as few days as possible, and stop after about 10 days if it's tablets or capsules, unless a doctor says otherwise. I shouldn't take it with aspirin or other painkillers like naproxen, but I can try paracetamol first or alongside it. If I take too much, or I get stomach pain, black sticky poo, swelling, or trouble breathing, I should ring 111, and I should see my GP if the pain doesn't go away.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.85,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.02554224
+        },
+        {
+          "persona_id": "limited_literacy",
+          "persona_name": "Limited health literacy",
+          "persona_description": "Finds long sentences and medical words hard; goes with the gist.",
+          "paraphrase": "I think I'm meant to try paracetamol first for my pain, and only take ibuprofen if that doesn't help. If I do take ibuprofen, I should use the smallest amount that works and stop after about 10 days for tablets or capsules unless a doctor says otherwise. I shouldn't take it with other painkillers like aspirin or naproxen, and I should go easy on alcohol. If I take too much, or I get bad tummy pain, black tar-like poo, swelling, or trouble breathing, I need to ring 111 straight away.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.9,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.024481660000000002
+        },
+        {
+          "persona_id": "second_language",
+          "persona_name": "English as an additional language",
+          "persona_description": "Reads every word carefully and literally; idioms and negations are harder.",
+          "paraphrase": "I think I'm allowed to take ibuprofen for pain or fever, but I should try paracetamol first and use the smallest amount for the shortest time. If it's tablets or capsules, I shouldn't take them for more than 10 days unless a doctor tells me to, and if my pain gets worse or doesn't go away, I should see my GP. I shouldn't take it with aspirin or naproxen, and I should drink less alcohol. If I take too much, or get black tar-like poo, a swollen throat, or trouble breathing, I should call 111 straight away, and I shouldn't drive myself to A&E.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.7,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.027874749999999997
+        },
+        {
+          "persona_id": "older_polypharmacy",
+          "persona_name": "Older adult, several medicines",
+          "persona_description": "Takes several medicines already; relies on habits from those.",
+          "paraphrase": "I'm supposed to use ibuprofen for pain only as long as I need it, and take the smallest amount that works. For tablets and capsules, I shouldn't go past 10 days unless a doctor says so, and I should see my GP if the pain doesn't go away. I shouldn't take it with other painkillers like aspirin or naproxen, and I should check with the pharmacist before mixing it with my other tablets. If I take too much, or get a bad stomach pain, black stools, swelling, or trouble breathing, I should call 111 straight away.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.85,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.02493766
+        },
+        {
+          "persona_id": "anxious",
+          "persona_name": "Anxious reader",
+          "persona_description": "Worried about side effects; attention drawn to warnings.",
+          "paraphrase": "I think I'm meant to try paracetamol first and only use ibuprofen if that doesn't help, and to take the smallest amount for the shortest time, never tablets for more than 10 days unless a doctor says so. I shouldn't take it with aspirin or naproxen, and I should skip it altogether if I'm pregnant, have asthma, or have had stomach ulcers or kidney or heart problems. The scary bits I'd watch for are black, tarry poo, vomiting blood, swelling, blood in my pee, or trouble breathing, and if any of that happens I should ring 111. If I take too much, I should call 111 and not drive myself anywhere.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.9,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.02518665
+        }
+      ],
+      "elapsed_s": 35.69052600860596,
+      "cost_usd": 0.12802296
+    },
+    "baseline_flagged": true
+  },
+  {
+    "doc": {
+      "doc_id": "synthetic_paracetamol_duration_reversed",
+      "title": "Paracetamol duration (SYNTHETIC - reversed min/max)",
+      "doc_type": "medication_leaflet",
+      "source_path": "data/sources/synthetic/synthetic_paracetamol_duration_reversed.txt",
+      "source_url": "https://www.nhs.uk/medicines/paracetamol-for-adults/how-and-when-to-take-paracetamol-for-adults/",
+      "access_date": "2026-10-17",
+      "is_synthetic": "TRUE",
+      "contains_planted_misunderstanding": "TRUE",
+      "risk_type": "reversed_instruction",
+      "test_set": "primary"
+    },
+    "single": {
+      "paraphrase": "I'd take paracetamol for my headache, fever, or toothache, and I'd follow the dose on the packet, taking less if I weigh under 50kg. I'd keep taking it for at least 3 days unless my doctor says otherwise, and I wouldn't take any other cold or flu medicine that also contains paracetamol. If I took too much, I'd call 111 straight away and bring the packet with me, and if they said to go to A&E I'd get someone else to drive me. I'd also call 111 if I noticed swelling, a rash, yellow skin or eyes, or unusual bruising.",
+      "judge": {
+        "flagged": true,
+        "risk_type": "ambiguous_negation",
+        "severity": 3,
+        "confidence": 0.72,
+        "source_phrase": "Paracetamol shouldn't be stopped before 3 days are up, unless your doctor hasn't said otherwise.",
+        "explanation": "The source's \"unless your doctor hasn't said otherwise\" is a confusing double negative. The reader resolved it as \"keep taking it for at least 3 days unless my doctor says otherwise\", so they may take paracetamol for 3 days even when they don't need it, or keep taking it despite side effects or an overdose risk. They may also keep taking it for a one-off headache or toothache, which could lead to overuse."
+      },
+      "elapsed_s": 31.946041107177734,
+      "cost_usd": 0.02315835
+    },
+    "panel": {
+      "readers": [
+        {
+          "persona_id": "skimmer",
+          "persona_name": "The skimmer",
+          "persona_description": "Reads quickly between other tasks; picks out headings and numbers.",
+          "paraphrase": "I think I'm supposed to take paracetamol as the packet says, and if I weigh under 50kg I might need a smaller amount. I shouldn't stop before 3 days are up unless my doctor says otherwise, and I shouldn't take it with cold or flu medicines that also contain paracetamol. If I take too much, I should ring 111 or get help online, and if they say go to A&E I shouldn't drive. If I notice a swollen throat, a itchy rash, yellow skin or eyes, or bruising easily, I should call 111.",
+          "judge": {
+            "flagged": true,
+            "risk_type": "ambiguous_negation",
+            "severity": 2,
+            "confidence": 0.6,
+            "source_phrase": "unless your doctor hasn't said otherwise",
+            "explanation": "The source's double negative can be read as \"stop only if the doctor hasn't said otherwise\", which is the opposite of what the reader took from it. The reader resolved it to \"unless my doctor says otherwise\" and may now believe they must keep taking paracetamol for 3 days. That could make them carry on despite side effects or when they don't need it."
+          },
+          "cost_usd": 0.02212944
+        },
+        {
+          "persona_id": "limited_literacy",
+          "persona_name": "Limited health literacy",
+          "persona_description": "Finds long sentences and medical words hard; goes with the gist.",
+          "paraphrase": "I think I'm meant to take paracetamol for pain or a high temperature, and to follow what the packet says about how much to take. I shouldn't stop it before 3 days are up unless my doctor says otherwise, and I shouldn't take it with other cold or flu medicines because they might have paracetamol in them too. If I take too much, I should ring 111, and if they say go to A&E, I shouldn't drive. If I get a swollen throat, a itchy rash, yellow skin, or bruise easily, I need to ring 111 straight away.",
+          "judge": {
+            "flagged": true,
+            "risk_type": "ambiguous_negation",
+            "severity": 2,
+            "confidence": 0.55,
+            "source_phrase": "unless your doctor hasn't said otherwise",
+            "explanation": "The source's \"shouldn't be stopped... unless your doctor hasn't said otherwise\" is a muddled double negative. Read literally, it means you may stop when the doctor hasn't said otherwise. The reader resolved it to \"unless my doctor says otherwise\", which may be the intended meaning but is not what the text literally says. The reader also treats a 3-day minimum as firm, which could mean continuing paracetamol when it isn't needed."
+          },
+          "cost_usd": 0.02419786
+        },
+        {
+          "persona_id": "second_language",
+          "persona_name": "English as an additional language",
+          "persona_description": "Reads every word carefully and literally; idioms and negations are harder.",
+          "paraphrase": "I think I'm supposed to take paracetamol for my pain or fever, and I should keep taking it for at least 3 days, unless my doctor tells me otherwise. I shouldn't take it with other medicines that have paracetamol in them, like cold and flu tablets, because I could take too much. If I take more than the packet says, I should call 111 and not drive myself to hospital. I also need to call 111 if my throat swells or my skin turns yellow.",
+          "judge": {
+            "flagged": true,
+            "risk_type": "ambiguous_negation",
+            "severity": 3,
+            "confidence": 0.6,
+            "source_phrase": "unless your doctor hasn't said otherwise",
+            "explanation": "The source's double negative \"unless your doctor hasn't said otherwise\" is ambiguous, and the reader resolved it to \"keep taking it for at least 3 days unless my doctor says otherwise\". Acting on that, they might keep taking paracetamol for 3 days even once the pain or fever has gone, or beyond the packet's limits. This increases the risk of overuse."
+          },
+          "cost_usd": 0.02414495
+        },
+        {
+          "persona_id": "older_polypharmacy",
+          "persona_name": "Older adult, several medicines",
+          "persona_description": "Takes several medicines already; relies on habits from those.",
+          "paraphrase": "As I understood it, I take the paracetamol the way the packet says and keep going for at least three days before I stop. I shouldn't take it with any cold or flu tablets that also have paracetamol in them, because I could end up with too much. If I take more than the packet says, I ring 111 straight away, and if they send me to A&E I shouldn't drive myself. I'd also ring 111 if I noticed a swollen throat, yellowing skin or eyes, or bruising easily.",
+          "judge": {
+            "flagged": true,
+            "risk_type": "ambiguous_negation",
+            "severity": 3,
+            "confidence": 0.6,
+            "source_phrase": "shouldn't be stopped before 3 days are up, unless your doctor hasn't said otherwise",
+            "explanation": "The source's double negative (\"unless your doctor hasn't said otherwise\") is garbled, and the reader turned it into an unconditional \"keep going for at least three days\". They dropped the doctor exception, and they may take paracetamol they don't need or keep taking it despite warning signs, when the packet's limits and a doctor's advice should decide."
+          },
+          "cost_usd": 0.02366836
+        },
+        {
+          "persona_id": "anxious",
+          "persona_name": "Anxious reader",
+          "persona_description": "Worried about side effects; attention drawn to warnings.",
+          "paraphrase": "I think I'm supposed to take paracetamol for my headache or fever, but only in the amount on the packet, and I shouldn't take any other cold or flu medicine that has paracetamol in it. I also thought I had to keep taking it for at least 3 days, even if I felt better. If I take too much, I need to call 111 straight away, and I shouldn't drive myself to A&E. I'm worried about the warning signs, like yellow skin or eyes, swelling, bruising easily, or a nosebleed, so I'd stop and get help right away if any of those happened.",
+          "judge": {
+            "flagged": true,
+            "risk_type": "ambiguous_negation",
+            "severity": 3,
+            "confidence": 0.7,
+            "source_phrase": "Paracetamol shouldn't be stopped before 3 days are up, unless your doctor hasn't said otherwise.",
+            "explanation": "The source's \"unless your doctor hasn't said otherwise\" is a confusing double negative. The reader dropped the exception and took it as an unconditional rule to keep taking paracetamol for at least 3 days even when they feel better. That could mean taking it when it isn't needed, and it ignores any doctor's instruction to stop."
+          },
+          "cost_usd": 0.02317535
+        }
+      ],
+      "elapsed_s": 33.317184925079346,
+      "cost_usd": 0.11731596
+    },
+    "baseline_flagged": true
+  },
+  {
+    "doc": {
+      "doc_id": "synthetic_ibuprofen_duration_reversed",
+      "title": "Ibuprofen duration (SYNTHETIC - reversed min/max)",
+      "doc_type": "medication_leaflet",
+      "source_path": "data/sources/synthetic/synthetic_ibuprofen_duration_reversed.txt",
+      "source_url": "https://www.nhs.uk/medicines/ibuprofen-for-adults/",
+      "access_date": "2026-10-17",
+      "is_synthetic": "TRUE",
+      "contains_planted_misunderstanding": "TRUE",
+      "risk_type": "reversed_instruction",
+      "test_set": "primary"
+    },
+    "single": {
+      "paraphrase": "I think I'm meant to use ibuprofen only for pain or a fever, and to take the smallest amount that works for as few days as I can. I should check the packet for how much to take, and I should try paracetamol first if I can. If I take tablets or capsules, I shouldn't stop before 10 days unless my doctor says so. If the pain doesn't go away, I should see my GP. If I take too much, or I get bad tummy pain, black sticky poo, swelling, or trouble breathing, I should ring 111 straight away.",
+      "judge": {
+        "flagged": true,
+        "risk_type": "ambiguous_negation",
+        "severity": 4,
+        "confidence": 0.8,
+        "source_phrase": "ibuprofen tablets and capsules are not to be discontinued ahead of the 10-day mark",
+        "explanation": "The convoluted negation \"not to be discontinued ahead of the 10-day mark\" is the opposite of the document's own advice to use the shortest time needed (the usual guidance is a 10-day maximum without medical advice). The reader read it as a 10-day minimum (\"shouldn't stop before 10 days\"), which could lead to unnecessary, prolonged NSAID use and a higher risk of ulcers, bleeding and kidney harm."
+      },
+      "elapsed_s": 33.65655517578125,
+      "cost_usd": 0.02519405
+    },
+    "panel": {
+      "readers": [
+        {
+          "persona_id": "skimmer",
+          "persona_name": "The skimmer",
+          "persona_description": "Reads quickly between other tasks; picks out headings and numbers.",
+          "paraphrase": "I think I'm meant to take ibuprofen for pain or a fever, but only the smallest amount I need and for as few days as possible. The leaflet said to try paracetamol first, and to keep taking the ibuprofen tablets or capsules for at least 10 days unless my doctor says otherwise. If I get tummy pain, black tar-like poo, a swollen throat, or trouble breathing, I should ring 111 straight away. I also shouldn't take it if I'm pregnant, have asthma or a stomach ulcer, or have had a bad reaction to it before.",
+          "judge": {
+            "flagged": true,
+            "risk_type": "reversed_instruction",
+            "severity": 4,
+            "confidence": 0.85,
+            "source_phrase": "ibuprofen tablets and capsules are not to be discontinued ahead of the 10-day mark",
+            "explanation": "The source's convoluted wording about not stopping before 10 days is the opposite of the safety guidance (the real guidance is not to take tablets/capsules beyond 10 days without medical advice), and the reader concluded they should keep taking it for at least 10 days. This contradicts their own stated aim of the shortest duration and risks prolonged use and serious side effects like ulcers, bleeding or kidney problems."
+          },
+          "cost_usd": 0.02133114
+        },
+        {
+          "persona_id": "limited_literacy",
+          "persona_name": "Limited health literacy",
+          "persona_description": "Finds long sentences and medical words hard; goes with the gist.",
+          "paraphrase": "I understood that I should use ibuprofen for my pain or a fever, but only if I can't use paracetamol first, since it causes more side effects. I'd take the smallest amount that works for the shortest time, and with tablets or capsules I'd stop after about 10 days unless a doctor said otherwise. If I took too much, or swallowed the gel or spray by accident and felt unwell, I'd ring 111. I wouldn't take it at all if I'd ever had a bad reaction to it, aspirin or similar tablets, or if I had a stomach ulcer, asthma, a heart, liver or kidney problem, or had a stroke.",
+          "judge": {
+            "flagged": true,
+            "risk_type": "ambiguous_negation",
+            "severity": 3,
+            "confidence": 0.8,
+            "source_phrase": "ibuprofen tablets and capsules are not to be discontinued ahead of the 10-day mark",
+            "explanation": "The source's convoluted wording says not to stop tablets or capsules before 10 days, but the reader took it as 'stop after about 10 days'. They resolved the negation in the opposite direction, so the 10-day instruction is reversed from what the source states. This conflicts with the same document's advice to use the smallest dose for the shortest time, so the sentence needs clarifying."
+          },
+          "cost_usd": 0.02457706
+        },
+        {
+          "persona_id": "second_language",
+          "persona_name": "English as an additional language",
+          "persona_description": "Reads every word carefully and literally; idioms and negations are harder.",
+          "paraphrase": "I think I'm supposed to take ibuprofen for pain or fever, but use the smallest amount for the shortest time. The leaflet says not to stop the tablets before 10 days, so I'd keep taking them for at least 10 days unless my doctor tells me otherwise. I should try paracetamol first, and I shouldn't take ibuprofen if I'm pregnant, have asthma, a stomach ulcer, or a heart, liver or kidney problem. If the pain gets worse, or I take too much, I'd see my GP or call 111.",
+          "judge": {
+            "flagged": true,
+            "risk_type": "ambiguous_negation",
+            "severity": 4,
+            "confidence": 0.7,
+            "source_phrase": "ibuprofen tablets and capsules are not to be discontinued ahead of the 10-day mark",
+            "explanation": "The convoluted negation \"not to be discontinued ahead of the 10-day mark\" led the reader to plan on taking tablets for at least 10 days. That conflicts with the document's core advice to use the shortest time needed, and the 10-day mark is meant as an upper limit. Acting on it could cause prolonged use and a higher risk of serious side effects such as stomach bleeding and kidney problems."
+          },
+          "cost_usd": 0.02546565
+        },
+        {
+          "persona_id": "older_polypharmacy",
+          "persona_name": "Older adult, several medicines",
+          "persona_description": "Takes several medicines already; relies on habits from those.",
+          "paraphrase": "I think I'm meant to take ibuprofen for my pain, using the smallest amount that works and only for as long as I need it. For the tablets or capsules, I understood I should keep going for at least 10 days, unless my doctor says otherwise. I'd fit it in with my other morning tablets, and if the pain doesn't go away, I should see my GP. I'd also watch for a sore stomach, black sticky poo, or swelling, and ring 111 if any of that happened.",
+          "judge": {
+            "flagged": true,
+            "risk_type": "ambiguous_negation",
+            "severity": 4,
+            "confidence": 0.85,
+            "source_phrase": "ibuprofen tablets and capsules are not to be discontinued ahead of the 10-day mark",
+            "explanation": "The convoluted negation led the reader to think they must take tablets or capsules for at least 10 days. The surrounding advice (smallest dose for the shortest time, and higher risk with long use) means 10 days is a limit, not a minimum. Acting on the reader's version risks unnecessary prolonged NSAID use and a higher chance of stomach, kidney or other serious side effects."
+          },
+          "cost_usd": 0.02418356
+        },
+        {
+          "persona_id": "anxious",
+          "persona_name": "Anxious reader",
+          "persona_description": "Worried about side effects; attention drawn to warnings.",
+          "paraphrase": "I think I'm supposed to take the smallest amount that works, for as short a time as possible, and follow the packet or my doctor's instructions. I should keep taking the tablets or capsules for at least 10 days, unless a doctor tells me to stop. I'm scared of the serious stuff, so I'd stop and call NHS 111 right away if I see black, tarry poo, vomit with blood, a swollen throat or tongue, trouble breathing, or swelling in my ankles or feet. I also shouldn't take it if I have asthma, a heart, liver or kidney problem, or if I'm pregnant, and I'd see a GP if the pain doesn't go away.",
+          "judge": {
+            "flagged": true,
+            "risk_type": "reversed_instruction",
+            "severity": 4,
+            "confidence": 0.9,
+            "source_phrase": "ibuprofen tablets and capsules are not to be discontinued ahead of the 10-day mark",
+            "explanation": "The source's convoluted wording is a garbled instruction. The surrounding text says to use the smallest dose for the shortest time and to see a GP if pain persists, so it most plausibly means not to take tablets or capsules for longer than 10 days without advice. The reader took it the opposite way, as a duty to keep taking them for at least 10 days. That contradicts the 'shortest time' advice and raises the risk of serious side effects from prolonged use."
+          },
+          "cost_usd": 0.02158055
+        }
+      ],
+      "elapsed_s": 32.0128710269928,
+      "cost_usd": 0.11713796
+    },
+    "baseline_flagged": true
+  },
+  {
+    "doc": {
+      "doc_id": "synthetic_amoxicillin_misseddose",
+      "title": "Amoxicillin missed dose (SYNTHETIC - double negative)",
+      "doc_type": "medication_leaflet",
+      "source_path": "data/sources/synthetic/synthetic_amoxicillin_misseddose_doublenegative.txt",
+      "source_url": "https://www.medicines.org.uk/emc/product/541/pil",
+      "access_date": "2026-10-17",
+      "is_synthetic": "TRUE",
+      "contains_planted_misunderstanding": "TRUE",
+      "risk_type": "double_negative_and_reversed_instruction",
+      "test_set": "primary"
+    },
+    "single": {
+      "paraphrase": "I'm meant to swallow the capsules whole with water, and spread my doses out so there are at least 4 hours between them. I should keep taking them until the whole course is finished, even if I start feeling better, because stopping early could let the infection come back. If I miss a dose, I think I take it when I remember, but I shouldn't take the next one too soon after. If I get itching, a rash, or swelling of my face, lips, or tongue, or trouble breathing, I should stop and see a doctor straight away. I also shouldn't share these with anyone, and I should keep them away from kids and somewhere below 25\u00b0C.",
+      "judge": {
+        "flagged": false,
+        "risk_type": "none",
+        "severity": 1,
+        "confidence": 0.7,
+        "source_phrase": "",
+        "explanation": ""
+      },
+      "elapsed_s": 35.034926891326904,
+      "cost_usd": 0.02245475
+    },
+    "panel": {
+      "readers": [
+        {
+          "persona_id": "skimmer",
+          "persona_name": "The skimmer",
+          "persona_description": "Reads quickly between other tasks; picks out headings and numbers.",
+          "paraphrase": "I'm supposed to take these capsules by swallowing them whole with water, spaced at least 4 hours apart during the day, and keep taking them until the course is finished even if I feel better. If I forget a dose, I think I just take it when I remember, and I shouldn't double up. I should stop and see a doctor straight away if I get a rash, itching, or swelling in my face or lips, or have trouble breathing. I shouldn't share them with anyone else, and I should keep them somewhere cool, below 25 degrees, away from kids.",
+          "judge": {
+            "flagged": true,
+            "risk_type": "ambiguous_negation",
+            "severity": 3,
+            "confidence": 0.7,
+            "source_phrase": "never skip doubling up if you've missed more than one in a row",
+            "explanation": "The missed-dose passage is built on stacked negatives (\"don't not take it\", \"never skip doubling up\"). The reader resolved it as \"don't double up\", which is the opposite of the literal wording, and also dropped the condition about waiting at least half the normal interval before the next dose. The reader's reading may be the safer one clinically, but it shows the instruction can't be reliably understood, so the reader may take the wrong number of doses or mistime the next one."
+          },
+          "cost_usd": 0.02391184
+        },
+        {
+          "persona_id": "limited_literacy",
+          "persona_name": "Limited health literacy",
+          "persona_description": "Finds long sentences and medical words hard; goes with the gist.",
+          "paraphrase": "I think I'm supposed to swallow the capsules whole with water and spread them out through the day, at least 4 hours apart. If I miss a dose, I should take it when I remember, but not take the next one too soon after. I need to keep taking them until the whole course is finished, even if I feel better, and see the doctor again if I still feel unwell after that. If I get an itchy rash, swelling in my face or lips, or trouble breathing, I should stop and see a doctor straight away.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.6,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.02285376
+        },
+        {
+          "persona_id": "second_language",
+          "persona_name": "English as an additional language",
+          "persona_description": "Reads every word carefully and literally; idioms and negations are harder.",
+          "paraphrase": "I think I'm supposed to swallow the capsules whole with water, not open them, and leave at least 4 hours between doses. I need to keep taking them until the whole course is finished, even if I start to feel better, because the infection could come back. If I miss a dose, I think I should still take it, but not take the next one too soon. If I get a rash, itching, or swelling of my face, lips, or tongue, or have trouble breathing, I should stop and see a doctor right away. I also shouldn't give these to anyone else, and I should keep them away from children.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.7,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.02204835
+        },
+        {
+          "persona_id": "older_polypharmacy",
+          "persona_name": "Older adult, several medicines",
+          "persona_description": "Takes several medicines already; relies on habits from those.",
+          "paraphrase": "I'm supposed to swallow the capsules whole with water and spread the doses out, at least 4 hours apart, so I'd fit them around my other pills. I need to keep taking them until the bottle is finished, even if I feel better, because stopping early could let the infection come back. If I miss a dose, I'll take it when I remember, but I won't double up. If I notice an itchy rash, swelling of my face or lips, or trouble breathing, I should stop and call the doctor right away.",
+          "judge": {
+            "flagged": true,
+            "risk_type": "ambiguous_negation",
+            "severity": 3,
+            "confidence": 0.8,
+            "source_phrase": "never skip doubling up if you've missed more than one in a row",
+            "explanation": "The missed-dose text is full of ambiguous negatives ('don't not take it', 'never skip doubling up'). The reader settled on 'I won't double up', which is the opposite of the literal wording, and they also dropped the rule about waiting at least half the normal interval before the next dose. They also say 'until the bottle is finished' rather than 'as long as your doctor has told you', so their course length could be wrong."
+          },
+          "cost_usd": 0.02342376
+        },
+        {
+          "persona_id": "anxious",
+          "persona_name": "Anxious reader",
+          "persona_description": "Worried about side effects; attention drawn to warnings.",
+          "paraphrase": "I'm meant to swallow the capsules whole with water, spaced at least 4 hours apart, and keep taking them until the whole course is finished even if I feel better. The big warning I'm keeping in mind is that if I get a rash, itching, or swelling of my face, lips, tongue, or body, or have any trouble breathing, I should stop straight away and see a doctor. I also need to tell my doctor if I have kidney problems, glandular fever, or trouble peeing, and I'm a bit unsure what to do if I miss a dose.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.8,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.02192425
+        }
+      ],
+      "elapsed_s": 33.60273098945618,
+      "cost_usd": 0.11416196
+    },
+    "baseline_flagged": true
+  },
+  {
+    "doc": {
+      "doc_id": "synthetic_antibiotics_doubledose",
+      "title": "Antibiotics missed dose (SYNTHETIC - double negative)",
+      "doc_type": "nhs_condition_page",
+      "source_path": "data/sources/synthetic/synthetic_antibiotics_doubledose_doublenegative.txt",
+      "source_url": "https://www.nhs.uk/conditions/antibiotics/",
+      "access_date": "2026-10-17",
+      "is_synthetic": "TRUE",
+      "contains_planted_misunderstanding": "TRUE",
+      "risk_type": "double_negative_and_reversed_instruction",
+      "test_set": "primary"
+    },
+    "single": {
+      "paraphrase": "From what I read, I'm supposed to take my antibiotics exactly as the packet or my doctor or pharmacist says, and only the ones prescribed to me. I shouldn't take them for colds, flu, or most coughs, since they don't work on those. If I miss a dose, I shouldn't take two to make up for it unless my next dose is almost due, and I shouldn't let more than one dose go missed. I need to call 111 or see my GP if I take an extra dose and feel unwell, and call 999 or go to A&E if I get a rash, trouble breathing, or swelling in my face or throat.",
+      "judge": {
+        "flagged": true,
+        "risk_type": "ambiguous_negation",
+        "severity": 3,
+        "confidence": 0.55,
+        "source_phrase": "Missing a dose isn't a reason not to take two next time if it's nearly time for your next one anyway",
+        "explanation": "The source's stacked negatives are hard to parse. The reader settled on taking a double dose when the next dose is almost due, which is the usual unsafe 'doubling up' action and could raise the risk of side effects. The reader also turned 'don't let more than one missed dose go uncorrected' into a plain 'don't miss more than one', so the correction step is lost."
+      },
+      "elapsed_s": 29.45187473297119,
+      "cost_usd": 0.02352175
+    },
+    "panel": {
+      "readers": [
+        {
+          "persona_id": "skimmer",
+          "persona_name": "The skimmer",
+          "persona_description": "Reads quickly between other tasks; picks out headings and numbers.",
+          "paraphrase": "From what I read, I should only take antibiotics if my doctor or pharmacist says I need them, because they don't work on colds, flu, or most coughs. When I do take them, I follow the packet or what the doctor or pharmacist told me, and I never take someone else's pills. If I get a rash, wheezing, or trouble breathing, or my face or throat starts swelling, I call 999 or go to A&E. If I take an extra dose by accident, I should call my GP or NHS 111 if I've taken more than one extra or feel seriously unwell.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.85,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.01981284
+        },
+        {
+          "persona_id": "limited_literacy",
+          "persona_name": "Limited health literacy",
+          "persona_description": "Finds long sentences and medical words hard; goes with the gist.",
+          "paraphrase": "The doctor said I only need antibiotics if the doctor thinks it's a bacteria problem, because they don't work on colds, flu, or most coughs. I should take them exactly as the packet says, and if I miss a dose, I'll take the next one when it's due, or maybe two if it's almost time. If I take an extra one by accident, I shouldn't panic, but if I've taken more than one extra or feel really bad, I need to call my GP or 111. If I get a rash, trouble breathing, or swelling in my face or throat, I call 999 right away. And I should never take anyone else's antibiotics.",
+          "judge": {
+            "flagged": true,
+            "risk_type": "dropped_condition",
+            "severity": 3,
+            "confidence": 0.7,
+            "source_phrase": "Missing a dose isn't a reason not to take two next time if it's nearly time for your next one anyway \u2014 just don't let more than one missed dose go uncorrected.",
+            "explanation": "The reader concluded they might take two doses ('or maybe two if it's almost time') after a missed dose, which risks double-dosing and increased side effects. The source's confusing double-negative wording was resolved as permission to double up, and the reader dropped the limit on how many missed doses are allowed."
+          },
+          "cost_usd": 0.01894376
+        },
+        {
+          "persona_id": "second_language",
+          "persona_name": "English as an additional language",
+          "persona_description": "Reads every word carefully and literally; idioms and negations are harder.",
+          "paraphrase": "I think I'm meant to take antibiotics only if my doctor says I need them, because they don't work on colds, flu, or most coughs. When I get them, I'd follow the packet or the doctor's or pharmacist's instructions, and if I forget a dose I'd take two next time if the next one is nearly due. If I take an extra dose and feel worried or unwell, I'd call my GP or 111. I'd call 999 straight away for a rash, wheezing, trouble breathing, or swelling of my face or throat. I'd never share my tablets with anyone else.",
+          "judge": {
+            "flagged": true,
+            "risk_type": "ambiguous_negation",
+            "severity": 3,
+            "confidence": 0.8,
+            "source_phrase": "Missing a dose isn't a reason not to take two next time if it's nearly time for your next one anyway",
+            "explanation": "The double negative in the source led the reader to a confident plan to double up after a missed dose. The same source warns that taking 2 doses closer together than recommended raises the risk of side effects. The reader also dropped the condition about not letting more than one missed dose go uncorrected."
+          },
+          "cost_usd": 0.02057885
+        },
+        {
+          "persona_id": "older_polypharmacy",
+          "persona_name": "Older adult, several medicines",
+          "persona_description": "Takes several medicines already; relies on habits from those.",
+          "paraphrase": "I think I'm supposed to take the antibiotics exactly as the packet or my doctor or pharmacist says, and only if my doctor has said I need them, since they don't work on colds, flu, or most coughs. If I miss a dose, I'll take it when I remember unless the next one is almost due, and I won't take extra to make up for it. I'll keep an eye out for side effects like a sore tummy, runny bowels, or feeling sick, and if I get a bad rash or find it hard to breathe, I'll call 999 straight away. I won't share my tablets with anyone, and I won't take any left over from someone else.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.7,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.02100676
+        },
+        {
+          "persona_id": "anxious",
+          "persona_name": "Anxious reader",
+          "persona_description": "Worried about side effects; attention drawn to warnings.",
+          "paraphrase": "I think I'm meant to take my antibiotics exactly as the packet or my GP says, and not stop early or skip doses. If I miss one, I should take it when I remember unless my next dose is almost due, and I shouldn't take two at once. I also need to watch for a skin rash, wheezing, trouble breathing, or swelling in my face or throat, because that means calling 999 or going to A&E straight away. I shouldn't take them if they weren't prescribed to me, and I should ring my GP if I take too many.",
+          "judge": {
+            "flagged": true,
+            "risk_type": "ambiguous_negation",
+            "severity": 3,
+            "confidence": 0.72,
+            "source_phrase": "Missing a dose isn't a reason not to take two next time if it's nearly time for your next one anyway",
+            "explanation": "The source's stacked negatives (\"isn't a reason not to take two\") are confusing and seem to allow taking two doses when the next one is nearly due. The reader resolved this as \"never take two at once\", the opposite of the literal wording. Because the source is ambiguous, the reader may be following the right safety rule for the wrong reason, or may mishandle missed doses."
+          },
+          "cost_usd": 0.02192975
+        }
+      ],
+      "elapsed_s": 35.397802114486694,
+      "cost_usd": 0.10227196
+    },
+    "baseline_flagged": true
+  },
+  {
+    "doc": {
+      "doc_id": "synthetic_ibuprofen_nsaid_softened",
+      "title": "Ibuprofen NSAID combination (SYNTHETIC - softened prohibition)",
+      "doc_type": "medication_leaflet",
+      "source_path": "data/sources/synthetic/synthetic_ibuprofen_nsaid_softened.txt",
+      "source_url": "https://www.nhs.uk/medicines/ibuprofen-for-adults/",
+      "access_date": "2026-10-17",
+      "is_synthetic": "TRUE",
+      "contains_planted_misunderstanding": "TRUE",
+      "risk_type": "dropped_condition",
+      "test_set": "edge_case"
+    },
+    "single": {
+      "paraphrase": "I'd take ibuprofen for my pain, but only the smallest dose that works, and only for a few days. If the tablets or capsules still haven't helped after about 10 days, or the pain gets worse, I'd go see my GP. I'd check with the pharmacist before mixing it with other medicines, especially blood thinners, steroids, antidepressants, or blood pressure pills. I'd also avoid drinking much alcohol, and I wouldn't take it at all if I've had a bad reaction to it, aspirin, or similar painkillers, or if I have a stomach ulcer.",
+      "judge": {
+        "flagged": false,
+        "risk_type": "none",
+        "severity": 1,
+        "confidence": 0.85,
+        "source_phrase": "",
+        "explanation": ""
+      },
+      "elapsed_s": 31.231784105300903,
+      "cost_usd": 0.02090855
+    },
+    "panel": {
+      "readers": [
+        {
+          "persona_id": "skimmer",
+          "persona_name": "The skimmer",
+          "persona_description": "Reads quickly between other tasks; picks out headings and numbers.",
+          "paraphrase": "I think I'm meant to take ibuprofen for my pain, but only the smallest amount that works and only for as few days as I can, which for tablets or capsules is no more than 10 days unless a doctor says otherwise. If the pain gets worse or doesn't go away, I should see my GP. I should also cut down on alcohol, since it can make side effects more likely. I'm not supposed to take it if I've had a bad reaction to ibuprofen, aspirin or similar painkillers, or if I've had a stomach ulcer. If I want to take it with another painkiller, I should ask a pharmacist first, though I can take paracetamol with it if needed.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.9,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.02095064
+        },
+        {
+          "persona_id": "limited_literacy",
+          "persona_name": "Limited health literacy",
+          "persona_description": "Finds long sentences and medical words hard; goes with the gist.",
+          "paraphrase": "I think I'm meant to take ibuprofen for my pain or swelling, but only the smallest amount I need and only for a short time. I shouldn't take the tablets or capsules for more than 10 days unless a doctor says so. If the pain gets worse or doesn't go away, I should go see my GP. I should also cut down on drinking alcohol, and watch for stomach pain, a rash, or anything that looks like an allergic reaction. If I want to take it with other painkillers, I'd check with a pharmacist first.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.9,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.01928906
+        },
+        {
+          "persona_id": "second_language",
+          "persona_name": "English as an additional language",
+          "persona_description": "Reads every word carefully and literally; idioms and negations are harder.",
+          "paraphrase": "I think I'm supposed to use ibuprofen when I have pain or swelling, and take the smallest amount I need for the shortest time. I shouldn't take the tablets or capsules for more than 10 days unless a doctor tells me to. If the pain gets worse or doesn't go away, I should go to my GP. I can take paracetamol at the same time if I need it, but I should try each one alone first, and I should drink less alcohol while I'm taking it.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.85,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.02003865
+        },
+        {
+          "persona_id": "older_polypharmacy",
+          "persona_name": "Older adult, several medicines",
+          "persona_description": "Takes several medicines already; relies on habits from those.",
+          "paraphrase": "The ibuprofen is for my pain, so I should take the smallest amount that works and only for as long as I need it. The tablets and capsules shouldn't go on for more than 10 days unless my doctor says so, and if the pain gets worse or doesn't go away, I should see my GP. I'd check with the pharmacist before mixing it with my other tablets, especially my blood thinner, blood pressure pills, or steroids. I should go easy on alcohol while I'm taking it.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.92,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.019329560000000003
+        },
+        {
+          "persona_id": "anxious",
+          "persona_name": "Anxious reader",
+          "persona_description": "Worried about side effects; attention drawn to warnings.",
+          "paraphrase": "From what I read, I should take the smallest amount of this that works, for the shortest time I need it, and not go past 10 days unless a doctor says so. I'm worried about the serious side effects, like stomach ulcers or bleeding, allergic reactions, and kidney problems, so I'll stop and get help if I notice anything like that. I shouldn't drink much alcohol, and I need to check with the pharmacist before mixing it with any other medicines, especially blood thinners, blood pressure pills, steroids, or antidepressants. If the pain gets worse or doesn't go away, I should see my GP.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.9,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.02005005
+        }
+      ],
+      "elapsed_s": 32.68792915344238,
+      "cost_usd": 0.09965796
+    },
+    "baseline_flagged": true
+  },
+  {
+    "doc": {
+      "doc_id": "synthetic_amoxicillin_driving_stacked_negation",
+      "title": "Amoxicillin driving advice (SYNTHETIC - stacked negation control)",
+      "doc_type": "medication_leaflet",
+      "source_path": "data/sources/synthetic/synthetic_amoxicillin_driving_stacked_negation.txt",
+      "source_url": "https://www.medicines.org.uk/emc/product/541/pil",
+      "access_date": "2026-10-17",
+      "is_synthetic": "TRUE",
+      "contains_planted_misunderstanding": "FALSE",
+      "risk_type": "none",
+      "test_set": "edge_case"
+    },
+    "single": {
+      "paraphrase": "I'm supposed to swallow the capsules whole with water, not open them, and spread my doses out through the day, about 4 hours apart. If I miss one, I take it when I remember, but I don't take two at once to catch up. I keep taking them until the doctor says I'm done, even if I feel better. If I get a rash, itching, or swelling in my face or throat, I stop and see a doctor right away, and I shouldn't drive if I feel dizzy or unwell.",
+      "judge": {
+        "flagged": false,
+        "risk_type": "none",
+        "severity": 1,
+        "confidence": 0.8,
+        "source_phrase": "",
+        "explanation": ""
+      },
+      "elapsed_s": 28.456220149993896,
+      "cost_usd": 0.02171735
+    },
+    "panel": {
+      "readers": [
+        {
+          "persona_id": "skimmer",
+          "persona_name": "The skimmer",
+          "persona_description": "Reads quickly between other tasks; picks out headings and numbers.",
+          "paraphrase": "I'm supposed to take the amoxicillin capsules exactly as the doctor or pharmacist told me, swallowing them whole with water and spacing the doses out through the day. If I miss one, I take it when I remember, but I don't double up. I need to keep taking them until they're finished, even if I feel better. If I get a rash, itching, or any swelling of my face or lips, or have trouble breathing, I stop and see a doctor straight away. I also keep them away from kids and somewhere cool, under 25 degrees.",
+          "judge": {
+            "flagged": true,
+            "risk_type": "dropped_condition",
+            "severity": 3,
+            "confidence": 0.6,
+            "source_phrase": "Do not take the next dose too soon, wait about 4 hours before taking the next dose.",
+            "explanation": "The reader says to take a missed dose when they remember and not to double up. They dropped the minimum 4-hour gap between doses, and also the \"at least 4 hours apart\" spacing rule. They could take a late dose too close to the next one and overdose."
+          },
+          "cost_usd": 0.02208944
+        },
+        {
+          "persona_id": "limited_literacy",
+          "persona_name": "Limited health literacy",
+          "persona_description": "Finds long sentences and medical words hard; goes with the gist.",
+          "paraphrase": "I think I'm meant to swallow these capsules whole with water, without opening them, and spread the doses out through the day, about 4 hours apart. If I miss one, I take it as soon as I remember, but I don't take two to catch up. I keep taking them until the doctor says to stop, even if I feel better. If I get an itchy rash, or my face, lips or tongue swell, or I have trouble breathing, I stop and see a doctor straight away. I also keep them away from kids and somewhere under 25 degrees.",
+          "judge": {
+            "flagged": true,
+            "risk_type": "dropped_condition",
+            "severity": 2,
+            "confidence": 0.4,
+            "source_phrase": "Space the doses evenly during the day, at least 4 hours apart.",
+            "explanation": "The reader turned the minimum gap of 'at least 4 hours' into a target of 'about 4 hours apart'. They could take doses every 4 hours, which is more often than the three-times-a-day or 12-hourly regimen. They also left out the 'wait about 4 hours before the next dose' step after a missed dose."
+          },
+          "cost_usd": 0.02501486
+        },
+        {
+          "persona_id": "second_language",
+          "persona_name": "English as an additional language",
+          "persona_description": "Reads every word carefully and literally; idioms and negations are harder.",
+          "paraphrase": "I think I'm supposed to take the capsules exactly as my doctor or pharmacist told me, swallowing them whole with water and not opening them. I should space the doses at least 4 hours apart, and if I miss one, I take it when I remember but don't double up. I need to keep taking them until the course is finished, even if I feel better. If I get itching, a rash, or any swelling of my face, lips, or tongue, or have trouble breathing, I stop and see a doctor straight away. I also keep the capsules away from kids and somewhere under 25\u00b0C, and I don't drive unless I'm sure I feel well.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.9,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.020009950000000002
+        },
+        {
+          "persona_id": "older_polypharmacy",
+          "persona_name": "Older adult, several medicines",
+          "persona_description": "Takes several medicines already; relies on habits from those.",
+          "paraphrase": "I think I'm supposed to take these capsules with a glass of water, swallowing them whole and not opening them. I'd take them about four hours apart, three times a day, and keep going until the doctor says to stop, even if I feel better. If I miss one, I should take it when I remember, but not double up. I should stop and see a doctor right away if I get a rash, itching, or swelling in my face, lips, or throat, and I'll keep the capsules somewhere cool and away from the grandchildren.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.8,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.02319236
+        },
+        {
+          "persona_id": "anxious",
+          "persona_name": "Anxious reader",
+          "persona_description": "Worried about side effects; attention drawn to warnings.",
+          "paraphrase": "I'm supposed to take the capsules exactly as my doctor said, swallowing them whole with water and spacing them about four hours apart. If I miss a dose, I take it when I remember, but I don't double up. I need to finish the whole course even if I feel better. The part that worries me most is that if I get a rash, itching, or swelling of my face, lips, or tongue, or have trouble breathing, I stop taking them and see a doctor straight away. I also shouldn't drive if I'm not sure it's safe.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.9,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.01995935
+        }
+      ],
+      "elapsed_s": 30.113590955734253,
+      "cost_usd": 0.11026596
+    },
+    "baseline_flagged": true
+  },
+  {
+    "doc": {
+      "doc_id": "synthetic_amoxicillin_kidney_selfadjust",
+      "title": "Amoxicillin kidney dose (SYNTHETIC - dangerous self-adjustment)",
+      "doc_type": "medication_leaflet",
+      "source_path": "data/sources/synthetic/synthetic_amoxicillin_kidney_selfadjust.txt",
+      "source_url": "https://www.medicines.org.uk/emc/product/541/pil",
+      "access_date": "2026-10-17",
+      "is_synthetic": "TRUE",
+      "contains_planted_misunderstanding": "TRUE",
+      "risk_type": "dangerous_confidence",
+      "test_set": "edge_case"
+    },
+    "single": {
+      "paraphrase": "I'm supposed to take the capsules exactly as the doctor or pharmacist told me, swallowing them whole with water and spacing them out evenly through the day, about 4 hours apart. If I miss a dose, I take it when I remember, but I don't double up. I keep taking them until the course is finished, even if I feel better, and if I notice an itchy rash, swelling in my face or lips, or trouble breathing, I stop and see a doctor straight away. If my kidneys aren't working well, I'd take a bit less than normal, though I'm not totally sure how much less. I also keep the medicine away from kids and somewhere under 25\u00b0C.",
+      "judge": {
+        "flagged": true,
+        "risk_type": "dangerous_confidence",
+        "severity": 4,
+        "confidence": 0.8,
+        "source_phrase": "just take a somewhat smaller amount than the standard dose each time \u2014 use your judgement on how much less.",
+        "explanation": "The leaflet's kidney instruction is vague and tells the reader to self-adjust the dose. The reader plans to take 'a bit less than normal' without consulting a doctor or pharmacist, even though section 2 says to talk to them first if you have kidney problems. This risks under- or over-dosing."
+      },
+      "elapsed_s": 25.263471841812134,
+      "cost_usd": 0.01957885
+    },
+    "panel": {
+      "readers": [
+        {
+          "persona_id": "skimmer",
+          "persona_name": "The skimmer",
+          "persona_description": "Reads quickly between other tasks; picks out headings and numbers.",
+          "paraphrase": "I think I'm supposed to swallow the capsules whole with water, about three times a day, spaced at least 4 hours apart. I should keep taking them until they're all gone, even if I feel better, because the infection could come back. If I miss a dose, I take it when I remember, but I wait 4 hours before the next one and never take two at once. If I notice itching, a rash, or swelling of my face or lips, or have trouble breathing, I stop and see a doctor straight away.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.8,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.02174594
+        },
+        {
+          "persona_id": "limited_literacy",
+          "persona_name": "Limited health literacy",
+          "persona_description": "Finds long sentences and medical words hard; goes with the gist.",
+          "paraphrase": "I think I'm supposed to swallow the capsules whole with water, spacing my doses out through the day, about 4 hours apart. If I miss one, I take it when I remember, but I don't double up. I need to keep taking them until the course is finished, even if I feel better, so the infection doesn't come back. If I get an itchy rash, swelling in my face or lips, or trouble breathing, I stop and see a doctor straight away.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.85,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.01955686
+        },
+        {
+          "persona_id": "second_language",
+          "persona_name": "English as an additional language",
+          "persona_description": "Reads every word carefully and literally; idioms and negations are harder.",
+          "paraphrase": "I think I'm supposed to swallow each capsule whole with water, without opening it, and take the doses at least 4 hours apart, exactly as my doctor or pharmacist told me. I need to keep taking it until the whole course is finished, even if I feel better, because the infection could come back. If I forget a dose, I take it when I remember, but I wait about 4 hours before the next one and never take two at once. If I get an itchy rash, my face or lips swell, or I have trouble breathing, I should stop and see a doctor straight away.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.85,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.01820595
+        },
+        {
+          "persona_id": "older_polypharmacy",
+          "persona_name": "Older adult, several medicines",
+          "persona_description": "Takes several medicines already; relies on habits from those.",
+          "paraphrase": "I'm supposed to swallow the capsules whole with water, not open them, and spread the doses through the day with at least four hours between them. I'll keep taking them until the course is finished, even if I feel better, because the infection could come back otherwise. If I miss a dose, I take it when I remember but wait four hours before the next one, and I don't double up. If I get an itchy rash, or my face, lips, or tongue swell, or I have trouble breathing, I stop and see the doctor straight away. Since my kidneys aren't the best, I'd take a bit less than the usual amount each time, using my own judgement.",
+          "judge": {
+            "flagged": true,
+            "risk_type": "dangerous_confidence",
+            "severity": 4,
+            "confidence": 0.9,
+            "source_phrase": "just take a somewhat smaller amount than the standard dose each time \u2014 use your judgement on how much less.",
+            "explanation": "The reader plans to self-adjust their dose because of kidney problems, relying on their own judgement. The source's own kidney guidance is unsafe, and its other section says to talk to a doctor or pharmacist first if you have kidney problems. The reader should not self-dose-reduce without professional advice, and under- or mis-dosing could cause treatment failure or harm."
+          },
+          "cost_usd": 0.01984736
+        },
+        {
+          "persona_id": "anxious",
+          "persona_name": "Anxious reader",
+          "persona_description": "Worried about side effects; attention drawn to warnings.",
+          "paraphrase": "I'm supposed to swallow each capsule whole with water and take the doses spread out, at least 4 hours apart. If I miss one, I should take it when I remember, but not double up. I need to keep taking them until they're finished, even if I feel better. The part that worries me most is an allergic reaction, like itching, a rash, or swelling of my face, lips, or tongue, or trouble breathing. If that happens, I stop the medicine and see a doctor right away. I'll also keep it out of kids' reach and somewhere under 25\u00b0C.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.8,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.02175885
+        }
+      ],
+      "elapsed_s": 27.187641143798828,
+      "cost_usd": 0.10111496
+    },
+    "baseline_flagged": true
+  },
+  {
+    "doc": {
+      "doc_id": "synthetic_amoxicillin_fulltext_buried",
+      "title": "Amoxicillin full-length leaflet (SYNTHETIC - buried missed-dose risk)",
+      "doc_type": "medication_leaflet",
+      "source_path": "data/sources/synthetic/synthetic_amoxicillin_fulltext_buried_misseddose.txt",
+      "source_url": "https://www.medicines.org.uk/emc/product/541/pil",
+      "access_date": "2026-10-17",
+      "is_synthetic": "TRUE",
+      "contains_planted_misunderstanding": "TRUE",
+      "risk_type": "double_negative_and_reversed_instruction",
+      "test_set": "edge_case"
+    },
+    "single": {
+      "paraphrase": "I'm supposed to take these capsules exactly as my doctor or pharmacist told me, swallowing them whole with water and spacing the doses out through the day, at least 4 hours apart. I need to finish the whole course even if I start feeling better, because stopping early could let the infection come back. I shouldn't take it if I'm allergic to penicillin or any antibiotic before. If I get a rash, swelling in my face or throat, trouble breathing, or bad diarrhea, I should stop and call my doctor right away.",
+      "judge": {
+        "flagged": false,
+        "risk_type": "none",
+        "severity": 1,
+        "confidence": 0.85,
+        "source_phrase": "",
+        "explanation": ""
+      },
+      "elapsed_s": 27.646326065063477,
+      "cost_usd": 0.03418305
+    },
+    "panel": {
+      "readers": [
+        {
+          "persona_id": "skimmer",
+          "persona_name": "The skimmer",
+          "persona_description": "Reads quickly between other tasks; picks out headings and numbers.",
+          "paraphrase": "I'm meant to take these capsules with a glass of water, not open them, and space the doses out at least 4 hours apart, usually three times a day. I should keep taking them until they're all gone, even if I feel better, and go back to the doctor if I still feel unwell afterwards. If I see a rash, swelling of my face or throat, or trouble breathing, I should stop taking them and see a doctor straight away. I'm not sure what to do if I miss a dose, so I'd probably just take the next one when it's due.",
+          "judge": {
+            "flagged": true,
+            "risk_type": "ambiguous_negation",
+            "severity": 3,
+            "confidence": 0.72,
+            "source_phrase": "If you miss a dose, don't not take it \u2014 but avoid taking your next dose any less than half the normal interval after that, and never skip doubling up",
+            "explanation": "The leaflet's missed-dose wording is a double negative ('don't not take it') plus a 'never skip doubling up' clause. The reader couldn't resolve it and plans to just take the next dose when due, so they would skip the missed dose. They also ignore the condition about spacing the next dose at least half the normal interval after the late one."
+          },
+          "cost_usd": 0.036386140000000004
+        },
+        {
+          "persona_id": "limited_literacy",
+          "persona_name": "Limited health literacy",
+          "persona_description": "Finds long sentences and medical words hard; goes with the gist.",
+          "paraphrase": "I'm supposed to take these antibiotic capsules exactly as the doctor said, swallowing them whole with water and spacing them out through the day, about four hours apart. I should keep taking them until the course is finished, even if I start feeling better, because stopping early could let the infection come back. I shouldn't pass them to anyone else. If I get a rash, swelling of my face or throat, trouble breathing, bad diarrhoea, or keep throwing up, I should stop taking them and see a doctor straight away. I also shouldn't drive if I feel dizzy or unwell.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.8,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.03657556
+        },
+        {
+          "persona_id": "second_language",
+          "persona_name": "English as an additional language",
+          "persona_description": "Reads every word carefully and literally; idioms and negations are harder.",
+          "paraphrase": "I think I'm supposed to swallow the capsules whole with water, spaced out through the day at least 4 hours apart, and keep taking them until the whole course is finished, even if I feel better. If I miss a dose, I'll take it when I remember, as long as it's not too close to the next one. I should stop and see a doctor straight away if I get a rash, swelling of my face or throat, or trouble breathing. I also shouldn't share these with anyone else, and I shouldn't drive if I feel dizzy or unwell.",
+          "judge": {
+            "flagged": true,
+            "risk_type": "ambiguous_negation",
+            "severity": 3,
+            "confidence": 0.6,
+            "source_phrase": "If you miss a dose, don't not take it \u2014 but avoid taking your next dose any less than half the normal interval after that, and never skip doubling up if you've missed more than one in a row.",
+            "explanation": "The source's missed-dose instruction is full of confusing double negatives (\"don't not take it\", \"never skip doubling up\"), and the reader reduced it to \"take it when I remember, as long as it's not too close to the next one.\" That drops the half-interval rule and the multiple-missed-doses condition, and it does not clearly resolve whether doubling up is allowed. This could lead to doses being taken too close together or doubled."
+          },
+          "cost_usd": 0.034856649999999996
+        },
+        {
+          "persona_id": "older_polypharmacy",
+          "persona_name": "Older adult, several medicines",
+          "persona_description": "Takes several medicines already; relies on habits from those.",
+          "paraphrase": "I'm meant to take these amoxicillin capsules with a glass of water, spaced about four hours apart during the day, and keep going until the whole course is finished even if I feel better. If I miss a dose I should take it when I remember, but not squeeze in the next one too soon. I'm not to take them if I'm allergic to penicillin or any antibiotic, and I should stop and call the doctor straight away if I get a rash, swelling of the face or throat, trouble breathing, or bad diarrhoea. I should also tell the doctor about my other tablets, like my gout medicine or blood thinner, and keep the capsules somewhere cool and away from children.",
+          "judge": {
+            "flagged": false,
+            "risk_type": "none",
+            "severity": 1,
+            "confidence": 0.72,
+            "source_phrase": "",
+            "explanation": ""
+          },
+          "cost_usd": 0.03726606
+        },
+        {
+          "persona_id": "anxious",
+          "persona_name": "Anxious reader",
+          "persona_description": "Worried about side effects; attention drawn to warnings.",
+          "paraphrase": "I'm meant to swallow the capsules whole with water, spaced about four hours apart, and keep taking them until the course is finished even if I feel better. If I'm allergic to penicillin, I shouldn't take them at all. I need to stop straight away and get medical help if I get a rash, swelling of my face, lips or throat, or trouble breathing. I should also tell my doctor about severe diarrhoea, yellow skin or eyes, or dark urine, and not drive if I feel dizzy.",
+          "judge": {
+            "flagged": true,
+            "risk_type": "dropped_condition",
+            "severity": 3,
+            "confidence": 0.6,
+            "source_phrase": "Space the doses evenly during the day, at least 4 hours apart.",
+            "explanation": "The reader turned the minimum gap of 'at least 4 hours' into a target of 'about four hours apart'. They could take doses every 4 hours, which is about 6 a day, instead of the prescribed three-times-a-day schedule spaced evenly through the day. That risks taking more than the intended daily dose."
+          },
+          "cost_usd": 0.03665905
+        }
+      ],
+      "elapsed_s": 30.19552993774414,
+      "cost_usd": 0.18174346
+    },
+    "baseline_flagged": true
+  }
+]

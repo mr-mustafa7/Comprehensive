@@ -1,0 +1,3 @@
+method,n_caught,n_planted,catch_rate,n_false_positive,n_clean,false_positive_rate
+comprehension_gap_checker,4,4,1.0,0,4,0.0
+readability_baseline,4,4,1.0,4,4,1.0

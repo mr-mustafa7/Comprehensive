@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}Governance — Comprehension-Gap Checker{% endblock %}
+{% block content %}
+
+<h1>Governance</h1>
+<p class="lede">Everything this tool has checked, aggregated. Read-only — nothing here re-runs or re-scores a check.</p>
+
+{% if stats.total_runs == 0 %}
+<p class="note empty">No checks run yet. Numbers appear here once documents have been checked from <a href="{{ url_for('index') }}">Run a document</a>.</p>
+{% else %}
+
+<p class="note">The breakdowns below mix real documents and labelled synthetic test
+cases — see the "Source" column in the table at the bottom for which is which per
+run. This page is a demo of the governance workflow at hackathon scale, not a
+population-level finding.</p>
+{% endif %}
+{% if stats.total_runs != 0 %}
+
+<div class="kpi-row">
+  <div class="kpi-card">
+    <span class="kpi-value">{{ stats.total_runs }}</span>
+    <span class="kpi-label">Documents checked</span>
+  </div>
+  <div class="kpi-card {{ 'warn' if stats.flagged_runs else '' }}">
+    <span class="kpi-value">{{ stats.flagged_runs }}</span>
+    <span class="kpi-label">Flagged</span>
+  </div>
+  <div class="kpi-card {{ 'danger' if stats.status_counts.pending else '' }}">
+    <span class="kpi-value">{{ stats.status_counts.pending }}</span>
+    <span class="kpi-label">Pending review</span>
+  </div>
+  <div class="kpi-card">
+    <span class="kpi-value">{{ stats.status_counts.confirmed }}</span>
+    <span class="kpi-label">Risk confirmed</span>
+  </div>
+  <div class="kpi-card">
+    <span class="kpi-value">{{ stats.status_counts.dismissed }}</span>
+    <span class="kpi-label">Dismissed, with reason</span>
+  </div>
+  <div class="kpi-card">
+    <span class="kpi-value">${{ stats.total_cost_usd }}</span>
+    <span class="kpi-label">CLI-reported spend</span>
+  </div>
+</div>
+
+<p class="section-title">Flags by risk type</p>
+{% if stats.risk_type_counts %}
+{% set max_count = stats.risk_type_counts.values() | list | max %}
+<div class="bar-chart">
+  {% for risk_type, count in stats.risk_type_counts.items() %}
+  <div class="bar-row">
+    <span class="bar-label">{{ risk_type }}</span>
+    <div class="bar-track"><div class="bar-fill" style="width: {{ (count / max_count * 100) | round }}%"></div></div>
+    <span class="bar-count">{{ count }}</span>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<p class="note empty">No flags yet.</p>
+{% endif %}
+
+<p class="section-title">Flags by severity</p>
+<div class="bar-chart">
+  {% for bucket, count in stats.severity_buckets.items() %}
+  {% set sev_max = stats.severity_buckets.values() | list | max %}
+  <div class="bar-row">
+    <span class="bar-label">{{ bucket }}</span>
+    <div class="bar-track"><div class="bar-fill {{ 'severity-high' if 'high' in bucket else ('severity-medium' if 'medium' in bucket else '') }}" style="width: {{ (count / sev_max * 100) | round if sev_max else 0 }}%"></div></div>
+    <span class="bar-count">{{ count }}</span>
+  </div>
+  {% endfor %}
+</div>
+
+<p class="section-title">Checks by day</p>
+<div class="bar-chart">
+  {% set day_max = stats.by_day.values() | list | max %}
+  {% for day, count in stats.by_day.items() %}
+  <div class="bar-row">
+    <span class="bar-label mono">{{ day }}</span>
+    <div class="bar-track"><div class="bar-fill" style="width: {{ (count / day_max * 100) | round }}%"></div></div>
+    <span class="bar-count">{{ count }}</span>
+  </div>
+  {% endfor %}
+</div>
+
+<p class="section-title">All runs</p>
+<div class="step-card">
+  <div class="detail-table-wrap">
+    <table class="detail-table">
+      <thead>
+        <tr><th>Run</th><th>Document</th><th>Source</th><th>Mode</th><th>Flagged</th><th>Status</th><th>Checked</th></tr>
+      </thead>
+      <tbody>
+        {% for r in store_runs %}
+        <tr>
+          <td><a href="{{ url_for('run_page', run_id=r.id) }}">#{{ r.id }}</a></td>
+          <td class="wrap">{{ r.title }}</td>
+          <td>{% if r.is_synthetic == 'TRUE' %}<span class="chip synthetic">synthetic</span>{% else %}<span class="chip real">real</span>{% endif %}</td>
+          <td>{{ 'panel' if r.mode == 'panel' else '1 reader' }}</td>
+          <td><span class="pill {{ 'true' if r.flagged else 'false' }}">{{ 'yes' if r.flagged else 'no' }}</span></td>
+          <td><span class="status-chip {{ r.status }}">{{ r.status.replace('_', ' ') }}</span></td>
+          <td class="mono">{{ r.created_at[:16].replace('T', ' ') }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endif %}
+
+{% endblock %}

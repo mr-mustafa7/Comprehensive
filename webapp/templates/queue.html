@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Review queue — Comprehension-Gap Checker{% endblock %}
+{% block content %}
+
+<h1>Review queue</h1>
+<p class="lede">Flagged checks wait here. Confirm, dismiss with a reason, or edit and retest — nothing is approved or rejected automatically.</p>
+
+{% macro run_rows(runs, empty) %}
+{% if runs %}
+<div class="detail-table-wrap step-card">
+  <table class="detail-table queue-table">
+    <thead><tr><th>Run</th><th>Document</th><th>Mode</th><th>Readers misread</th><th>Status</th><th>Checked</th></tr></thead>
+    <tbody>
+      {% for r in runs %}
+      <tr>
+        <td><a href="{{ url_for('run_page', run_id=r.id) }}">#{{ r.id }}</a></td>
+        <td class="wrap"><a href="{{ url_for('run_page', run_id=r.id) }}">{{ r.title }}</a>
+          {% if r.is_synthetic == 'TRUE' %}<span class="chip synthetic">synthetic</span>{% endif %}
+          {% if r.parent_run_id %}<span class="chip real">retest of #{{ r.parent_run_id }}</span>{% endif %}</td>
+        <td>{{ 'panel' if r.mode == 'panel' else '1 reader' }}</td>
+        <td><span class="pill {{ 'true' if r.result.flagged else 'false' }}">{{ r.result.n_flagged }}/{{ r.result.n_readers }}</span></td>
+        <td><span class="status-chip {{ r.status }}">{{ r.status.replace('_', ' ') }}</span></td>
+        <td>{{ r.created_at[:16].replace('T', ' ') }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p class="note empty">{{ empty }}</p>
+{% endif %}
+{% endmacro %}
+
+<p class="section-title">Pending review ({{ pending|length }})</p>
+{{ run_rows(pending, "Nothing waiting. Flagged checks appear here.") }}
+
+<p class="section-title">Reviewed ({{ reviewed|length }})</p>
+{{ run_rows(reviewed, "No decisions recorded yet.") }}
+
+<p class="section-title">Not flagged — no review needed ({{ clear|length }})</p>
+{{ run_rows(clear, "No clear runs yet.") }}
+
+{% endblock %}

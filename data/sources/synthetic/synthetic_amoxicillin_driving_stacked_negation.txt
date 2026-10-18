@@ -1,0 +1,80 @@
+*** SYNTHETIC / MODIFIED TEST CASE — NOT A REAL MHRA DOCUMENT ***
+BASE SOURCE: Amoxicillin 250mg Capsules PIL (see data/sources/pil_amoxicillin_250mg_capsules.txt
+for the unmodified original; https://www.medicines.org.uk/emc/product/541/pil, accessed 2026-10-17).
+
+WHAT WAS CHANGED: the "Driving and using machines" sentence was rewritten to stack three
+negations on top of each other, deliberately testing a DIFFERENT failure mode than our other
+synthetic cases. Unlike those, this rewrite's meaning, carefully parsed, is UNCHANGED from the
+original — it is confusing surface wording around a preserved instruction, not a planted reversal.
+This document is included as a control/edge case to test whether the judge can tell the
+difference between "the source is awkwardly worded" and "the paraphrase reveals an actual
+misunderstanding" — flagging it would only be correct if the paraphrase itself gets the meaning
+wrong, not merely because the source sentence is hard to parse.
+
+ORIGINAL SENTENCE: "Do not drive or operate machinery unless you are feeling well."
+MODIFIED SENTENCE: "You shouldn't assume it's fine not to avoid driving or operating machinery
+unless you're certain you're feeling well enough not to be affected."
+(Parsed carefully: "assume it's fine not to avoid driving" = "assume it's fine to drive"; "not
+to assume that, unless certain you're not affected" preserves the original meaning: avoid
+driving unless you're sure you're feeling well. No reversal was planted.)
+GROUND TRUTH LABEL: contains_planted_misunderstanding = FALSE (control — confusing wording,
+meaning preserved); risk_type = none
+
+This file is synthetic/modified test data created for the SotonShip 2026 hackathon (Responsible AI
+track) to evaluate a comprehension-gap checker. It does not represent real patient guidance and must
+not be used as medical advice.
+---
+
+Amoxicillin 250mg and 500mg Capsules
+
+PACKAGE LEAFLET: INFORMATION FOR THE USER
+
+Amoxicillin 250mg Capsules
+Amoxicillin 500mg Capsules
+amoxicillin
+
+Read all of this leaflet carefully before you start taking this medicine. Keep this leaflet. You may need to read it again. If you have any further questions, ask your doctor or pharmacist.
+
+1. WHAT AMOXICILLIN CAPSULES ARE AND WHAT THEY ARE USED FOR
+
+Amoxicillin Capsules contain amoxicillin as the active ingredient which belongs to a group of medicines called 'penicillins'. Amoxicillin Capsules are used to treat infections caused by bacteria in different parts of the body.
+
+2. WHAT YOU NEED TO KNOW BEFORE YOU TAKE AMOXICILLIN CAPSULES
+
+Do not take Amoxicillin Capsules if you are allergic to amoxicillin, penicillin or any of the other ingredients of this medicine, or if you have ever had an allergic reaction to any antibiotic.
+
+Pregnancy, breast-feeding and fertility
+
+If you are pregnant or breast-feeding, think you may be pregnant or are planning to have a baby, ask your doctor or pharmacist for advice before taking this medicine.
+
+Driving and using machines
+
+Amoxicillin can have side effects and the symptoms (such as allergic reactions, dizziness and convulsions) may make you unfit to drive.
+
+You shouldn't assume it's fine not to avoid driving or operating machinery unless you're certain you're feeling well enough not to be affected.
+
+3. HOW TO TAKE AMOXICILLIN CAPSULES
+
+Always take this medicine exactly as your doctor or pharmacist has told you. Swallow with water without opening capsule. Space the doses evenly during the day, at least 4 hours apart.
+
+The usual dose of Amoxicillin for adults is 250 mg to 500 mg three times a day or 750 mg to 1 g every 12 hours, depending on the severity and type of infection.
+
+If you forget to take Amoxicillin Capsules
+
+If you forget to take a dose, take it as soon as you remember. Do not take the next dose too soon, wait about 4 hours before taking the next dose. Do not take a double dose to make up for a forgotten dose.
+
+How long should you take amoxicillin for?
+
+Keep taking Amoxicillin for as long as your doctor has told you to, even if you feel better.
+
+4. POSSIBLE SIDE EFFECTS
+
+Stop taking Amoxicillin capsules and see a doctor straight away if you notice signs of an allergic reaction, such as skin itching or rash, swelling of the face, lips, tongue, body or breathing difficulties.
+
+Common side effects (may affect up to 1 in 10 people): skin rash, feeling sick (nausea), diarrhoea.
+
+5. HOW TO STORE AMOXICILLIN CAPSULES
+
+Keep this medicine out of the sight and reach of children. Do not store above 25°C. Use Amoxicillin Capsules before the expiry date shown on the label.
+
+This leaflet was last revised in 02/2025.

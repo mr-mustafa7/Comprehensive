@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Confirm transcription — Comprehension-Gap Checker{% endblock %}
+{% block content %}
+
+<a class="back-link" href="{{ url_for('upload_form') }}">← Upload a different image</a>
+
+<h1>Check the transcription before running it</h1>
+<p class="lede">This is what Claude read from your image. Nothing is checked for
+misunderstanding risk until you confirm or correct this text — a transcription
+error here would make any check meaningless, so review it carefully.</p>
+
+{% if low_confidence %}
+<div class="error-summary" role="alert">
+  <h2>Low-confidence transcription</h2>
+  <p>The model flagged this image as unclear, cut off, or hard to read. Check the
+  text below especially carefully, or re-upload a clearer photo.</p>
+</div>
+{% endif %}
+
+<p class="cost-note">Transcription cost: ${{ cost_usd }}</p>
+
+<div class="step-card">
+  <div class="body">
+    <form method="post" action="{{ url_for('upload_run') }}" class="review-form">
+      <label>Document title
+        <input name="title" value="{{ title }}" required>
+      </label>
+      <label>Transcribed text — edit anything the model got wrong
+        <textarea name="text" rows="16">{{ transcribed_text }}</textarea>
+      </label>
+      <label>Check mode</label>
+      <div class="form-actions">
+        <button class="btn ghost" name="mode" value="single">Run — 1 reader</button>
+        <button class="btn" name="mode" value="panel">Run — reader panel →</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

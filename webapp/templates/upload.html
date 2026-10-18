@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Upload a document — Comprehension-Gap Checker{% endblock %}
+{% block content %}
+
+<a class="back-link" href="{{ url_for('index') }}">← Run a document</a>
+
+<h1>Upload a photographed or scanned document</h1>
+<p class="lede">For a document outside the test set — photograph or scan a printed
+leaflet or discharge note and check it the same way. Reviewer-side input only:
+no patient is involved, and nothing about a real person is stored.</p>
+
+{% if error %}
+<div class="error-summary" role="alert" tabindex="-1" id="error-summary">
+  <h2>There is a problem</h2>
+  <p>{{ error }}</p>
+</div>
+<script>document.getElementById('error-summary').focus();</script>
+{% endif %}
+
+<div class="step-card">
+  <div class="body">
+    <form method="post" action="{{ url_for('upload_transcribe') }}" enctype="multipart/form-data" class="review-form">
+      <label>Document title (optional)
+        <input name="title" placeholder="e.g. Ibuprofen gel, box leaflet">
+      </label>
+      <label>Photo or scan (PNG, JPEG, WebP or GIF, up to 10MB)
+        <input type="file" name="image" accept="image/png,image/jpeg,image/webp,image/gif" required>
+      </label>
+      <div class="form-actions">
+        <button class="btn">Transcribe →</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<p class="cli-note">What happens next: the image is transcribed to text by Claude
+(a live model call, a few cents, ~5–10s), then shown back to you to check and edit
+before any comprehension check runs — the transcription is never used without your
+confirmation.</p>
+
+{% endblock %}

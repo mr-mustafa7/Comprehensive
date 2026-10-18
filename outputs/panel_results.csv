@@ -1,0 +1,13 @@
+doc_id,test_set,contains_planted_misunderstanding,ground_truth_risk_type,single_flagged,single_risk_type,panel_flagged,panel_n_flagged,panel_n_errors,reader_skimmer,reader_limited_literacy,reader_second_language,reader_older_polypharmacy,reader_anxious,baseline_flagged,single_cost_usd,panel_cost_usd,single_time_s,panel_time_s
+pil_amoxicillin,primary,FALSE,none,True,dropped_condition,True,2,0,False,True,True,False,False,True,0.040998,0.189766,36.2,35.2
+nhs_antibiotics,primary,FALSE,none,False,none,False,0,0,False,False,False,False,False,True,0.023872,0.118107,29.8,31.1
+nhs_paracetamol,primary,FALSE,none,False,none,False,0,0,False,False,False,False,False,True,0.020483,0.112506,26.2,31.7
+nhs_ibuprofen,primary,FALSE,none,False,none,False,0,0,False,False,False,False,False,True,0.024575,0.128023,31.5,35.7
+synthetic_paracetamol_duration_reversed,primary,TRUE,reversed_instruction,True,ambiguous_negation,True,5,0,True,True,True,True,True,True,0.023158,0.117316,31.9,33.3
+synthetic_ibuprofen_duration_reversed,primary,TRUE,reversed_instruction,True,ambiguous_negation,True,5,0,True,True,True,True,True,True,0.025194,0.117138,33.7,32.0
+synthetic_amoxicillin_misseddose,primary,TRUE,double_negative_and_reversed_instruction,False,none,True,2,0,True,False,False,True,False,True,0.022455,0.114162,35.0,33.6
+synthetic_antibiotics_doubledose,primary,TRUE,double_negative_and_reversed_instruction,True,ambiguous_negation,True,3,0,False,True,True,False,True,True,0.023522,0.102272,29.5,35.4
+synthetic_ibuprofen_nsaid_softened,edge_case,TRUE,dropped_condition,False,none,False,0,0,False,False,False,False,False,True,0.020909,0.099658,31.2,32.7
+synthetic_amoxicillin_driving_stacked_negation,edge_case,FALSE,none,False,none,True,2,0,True,True,False,False,False,True,0.021717,0.110266,28.5,30.1
+synthetic_amoxicillin_kidney_selfadjust,edge_case,TRUE,dangerous_confidence,True,dangerous_confidence,True,1,0,False,False,False,True,False,True,0.019579,0.101115,25.3,27.2
+synthetic_amoxicillin_fulltext_buried,edge_case,TRUE,double_negative_and_reversed_instruction,False,none,True,3,0,True,False,True,False,True,True,0.034183,0.181743,27.6,30.2

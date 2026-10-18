@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Run a document — Comprehension-Gap Checker{% endblock %}
+{% block content %}
+
+<h1>Run a document</h1>
+<p class="lede">Pick a document, then 1 reader or the reader panel. Flagged checks go to the <a href="{{ url_for('queue') }}">review queue</a>. <a href="{{ url_for('eval_page') }}">How this works and what it's measured at →</a></p>
+
+{% macro doc_list(docs) %}
+<div class="doc-grid">
+  {% for d in docs %}
+  <div class="doc-card">
+    <div class="meta">
+      <span class="title">{{ d.title }}</span>
+      <span class="sub">{{ d.doc_type }} · {{ d.source_url }}</span>
+    </div>
+    <div class="doc-actions">
+      {% if d.is_synthetic == 'TRUE' %}
+        <span class="chip synthetic">synthetic</span>
+      {% else %}
+        <span class="chip real">real, unmodified</span>
+      {% endif %}
+      <form method="post" action="{{ url_for('start') }}">
+        <input type="hidden" name="doc_id" value="{{ d.doc_id }}">
+        <button class="btn ghost" name="mode" value="single" aria-label="Run 1 reader on {{ d.title }}">1 reader</button>
+        <button class="btn" name="mode" value="panel" aria-label="Run reader panel on {{ d.title }}">Reader panel →</button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endmacro %}
+
+<p class="section-title">Test documents</p>
+{{ doc_list(primary) }}
+
+<p class="section-title">Edge-case documents</p>
+{{ doc_list(edge) }}
+
+<p class="section-title">Something not in the test set?</p>
+<div class="doc-card">
+  <div class="meta">
+    <span class="title">Upload a photographed or scanned document</span>
+    <span class="sub">reviewer-side input · no patient involved, nothing about a real person stored</span>
+  </div>
+  <div class="doc-actions">
+    <a class="btn" href="{{ url_for('upload_form') }}">Upload →</a>
+  </div>
+</div>
+
+{% endblock %}

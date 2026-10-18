@@ -3,23 +3,18 @@
 {% block content %}
 <div class="page-heading"><span class="eyebrow">Controlled content</span><h1>Medication documentation</h1><p class="lede">Create clinician-authored supplementary documentation, preserve every version, and assign only approved wording. Manufacturer leaflets are never silently rewritten.</p></div>
 <div class="documentation-stack">
-  <details class="panel medicines-library documentation-disclosure">
-    <summary>
-      <span><span class="eyebrow">Create</span><span class="medicine-library-title"><strong>New approved documentation</strong></span></span>
-      <span class="medicine-library-chevron" aria-hidden="true">⌄</span>
-    </summary>
-    <div class="medicines-library-content documentation-disclosure-content">
-      <form method="post" enctype="multipart/form-data" class="stack-form">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <label>Title<input name="title" required placeholder="Medicine A — supplementary documentation"></label>
-        <label>Source<input name="source" required placeholder="Clinician-authored supplementary documentation"></label>
-        <label>Provenance<input name="provenance" required placeholder="Clinician-authored; not a manufacturer leaflet"></label>
-        <label>Upload UTF-8 documentation text (optional)<input type="file" name="document_file" accept=".txt,.md,text/plain,text/markdown"></label>
-        <label>Or enter approved documentation text<textarea name="text" rows="7" placeholder="Enter the exact wording approved for assignment."></textarea></label>
-        <button class="btn">Create approved version 1</button>
-      </form>
-    </div>
-  </details>
+  <section class="panel create-documentation">
+    <div class="panel-heading"><div><span class="eyebrow">Create</span><h2>New approved documentation</h2></div></div>
+    <form method="post" enctype="multipart/form-data" class="stack-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label>Title<input name="title" required placeholder="Medicine A — supplementary documentation"></label>
+      <label>Source<input name="source" required placeholder="Clinician-authored supplementary documentation"></label>
+      <label>Provenance<input name="provenance" required placeholder="Clinician-authored; not a manufacturer leaflet"></label>
+      <label>Upload UTF-8 documentation text (optional)<input type="file" name="document_file" accept=".txt,.md,text/plain,text/markdown"></label>
+      <label>Or enter approved documentation text<textarea name="text" rows="7" placeholder="Enter the exact wording approved for assignment."></textarea></label>
+      <button class="btn">Create approved version 1</button>
+    </form>
+  </section>
 
   <details class="panel medicines-library documentation-disclosure">
     <summary>
@@ -42,7 +37,6 @@
     </div>
   </details>
 </div>
-<div class="safety-note page-note"><strong>Separate pre-release feature:</strong> use the <a href="{{ url_for('index') }}">simulated-reader document testing workspace</a> for document-level comprehension checks. Patient reports use the approved patient-specific regimen instead.</div>
 
 <script>
   (() => {

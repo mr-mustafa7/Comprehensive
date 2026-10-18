@@ -5,7 +5,7 @@
   <span class="eyebrow">Clinical workspace · {{ current_user.display_name }}</span>
   <h1>A clearer picture of<br><span class="accent-text">medication use.</span></h1>
   <p class="lede">Patient reports, approved documentation, and your decisions.<br class="desktop-break"> Together in one place.</p>
-  <div class="hero-actions"><a class="btn" href="#recent-reports">Review reports <span aria-hidden="true">→</span></a><a class="btn ghost" href="{{ url_for('clinical.documents') }}">Manage documentation</a></div>
+  <div class="hero-actions"><a class="btn" href="{{ url_for('clinical.clinician_reports') }}">Review reports <span aria-hidden="true">→</span></a><a class="btn ghost" href="{{ url_for('clinical.documents') }}">Manage documentation</a></div>
 </header>
 
 <div class="metric-grid overview-metrics" aria-label="Workspace overview">
@@ -16,51 +16,89 @@
 </div>
 
 <div class="dashboard-grid workspace-sections">
-  <section class="panel span-2" id="recent-reports">
-    <div class="panel-heading"><div><span class="eyebrow">Review queue</span><span class="activity-summary-row"><h2>Recent medication-use reports</h2><span class="count-badge">{{ reports|length }}</span></span></div></div>
-    {% if reports %}
-    <div class="table-scroll"><table class="data-table report-table" role="table" aria-label="Recent medication-use reports"><thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Patient</th><th scope="col" role="columnheader">Medication</th><th scope="col" role="columnheader">Reported</th><th scope="col" role="columnheader">Assessment</th><th scope="col" role="columnheader"><span class="visually-hidden">Actions</span></th></tr></thead><tbody role="rowgroup">
-      {% for report in reports %}<tr role="row">
-        <td role="cell" data-label="Patient"><a href="{{ url_for('clinical.clinician_patient', patient_id=report.patient_id) }}">{% for patient in patients %}{% if patient.id == report.patient_id %}{{ patient.display_name }}{% endif %}{% endfor %}</a></td>
-        <td role="cell" data-label="Medication">{{ report.medication_name }} <span class="muted">v{{ report.version_number }}</span></td>
-        <td role="cell" data-label="Reported">{{ report.reported_usage_date }}</td>
-        <td role="cell" data-label="Assessment"><span class="assessment-chip {{ report.assessment_status }}">{{ (report.assessment_status or 'pending').replace('_', ' ') }}</span>{% if report.review_decision %}<span class="reviewed-mark">Reviewed</span>{% endif %}</td>
-        <td role="cell" class="report-row-action"><a class="text-link" aria-label="Inspect report {{ report.id }}" href="{{ url_for('clinical.clinician_report', report_id=report.id) }}">Inspect <span aria-hidden="true">→</span></a></td>
-      </tr>{% endfor %}
-    </tbody></table></div>
-    {% else %}<div class="empty-state"><strong>No reports yet</strong><span>Patient reports will appear here.</span></div>{% endif %}
-  </section>
-
-  <section class="panel" id="assigned-patients">
-    <div class="panel-heading"><div><span class="eyebrow">People</span><h2>Assigned patients</h2></div></div>
-    <div class="list-stack">
-      {% for patient in patients %}<a class="list-row" href="{{ url_for('clinical.clinician_patient', patient_id=patient.id) }}"><span class="avatar">{{ patient.display_name[:1] }}</span><span><strong>{{ patient.display_name }}</strong><small>{{ patient.assignment_count }} active documentation set · {{ patient.review_count }} flagged/incomplete</small></span><span aria-hidden="true">→</span></a>{% endfor %}
+  <details class="panel medicines-library" id="assigned-patients">
+    <summary>
+      <span><span class="eyebrow">People</span><span class="medicine-library-title"><strong>Assigned patients</strong><span class="count-badge">{{ patients|length }}</span></span></span>
+      <span class="medicine-library-chevron" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="medicines-library-content">
+      {% if patients %}
+      <div class="medicine-search">
+        <label for="patient-search">Search patients</label>
+        <input id="patient-search" type="search" placeholder="Search by patient name" autocomplete="off" aria-controls="patient-list">
+      </div>
+      <div class="list-stack dashboard-search-list" id="patient-list">
+        {% for patient in patients %}<a class="list-row dashboard-search-row" data-search="{{ patient.display_name|lower }}" href="{{ url_for('clinical.clinician_patient', patient_id=patient.id) }}"><span class="avatar">{{ patient.display_name[:1] }}</span><span><strong>{{ patient.display_name }}</strong><small>{{ patient.assignment_count }} active documentation set · {{ patient.review_count }} flagged/incomplete</small></span><span aria-hidden="true">→</span></a>{% endfor %}
+      </div>
+      <div class="empty-state dashboard-no-results" id="patient-no-results" hidden><strong>No patients found</strong><span>Try another name.</span></div>
+      {% else %}
+      <div class="empty-state"><strong>No assigned patients</strong><span>Invite a patient to get started.</span></div>
+      {% endif %}
+      <details class="inline-details"><summary>Invite a patient</summary>
+        <form method="post" action="{{ url_for('clinical.invite_patient') }}" class="stack-form compact-form">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <label>Email address<input type="email" name="email" required placeholder="patient@example.com"></label>
+          <button class="btn">Create single-use invite</button>
+        </form>
+      </details>
     </div>
-    <details class="inline-details"><summary>Invite a patient</summary>
-      <form method="post" action="{{ url_for('clinical.invite_patient') }}" class="stack-form compact-form">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <label>Email address<input type="email" name="email" required placeholder="patient@example.com"></label>
-        <button class="btn">Create single-use invite</button>
-      </form>
-    </details>
-  </section>
+  </details>
 
-  <section class="panel" id="instruction-improvements">
-    <div class="panel-heading"><div><span class="eyebrow">Clinician approval</span><h2>Documentation improvements</h2></div></div>
-    {% if suggestions %}<div class="list-stack">
-      {% for suggestion in suggestions %}<a class="list-row plain" href="{{ url_for('clinical.suggestion_detail', suggestion_id=suggestion.id) }}"><span><strong>{{ suggestion.document_title }}</strong><small>{{ suggestion.assessment_count }} assessment(s) contributed · source v{{ suggestion.source_version }}</small></span><span>Review →</span></a>{% endfor %}
-    </div>{% else %}<div class="empty-state"><strong>No suggestions waiting</strong><span>Nothing changes without clinician approval.</span></div>{% endif %}
-  </section>
-
-  <section class="panel span-2 activity-panel" id="recent-activity">
-    <details class="activity-disclosure">
-      <summary>
-        <span class="eyebrow">Traceability</span>
-        <span class="activity-summary-row"><h2>Recent activity</h2><span class="count-badge">{{ activity|length }}</span><span class="activity-chevron" aria-hidden="true">⌄</span></span>
-      </summary>
-      {% if activity %}<ol class="activity-feed">{% for event in activity %}<li><span class="activity-dot"></span><div><strong>{{ event.action.replace('.', ' ') }}</strong><small>{{ event.actor_name or 'Assessment service' }} · {{ event.created_at[:16].replace('T', ' ') }}</small></div></li>{% endfor %}</ol>
-      {% else %}<div class="empty-state"><strong>No activity yet</strong><span>Sign-ins, reports, and approvals will be listed here.</span></div>{% endif %}
-    </details>
-  </section>
+  <details class="panel medicines-library" id="instruction-improvements">
+    <summary>
+      <span><span class="eyebrow">Clinician approval</span><span class="medicine-library-title"><strong>Documentation improvements</strong><span class="count-badge">{{ suggestions|length }}</span></span></span>
+      <span class="medicine-library-chevron" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="medicines-library-content">
+      {% if suggestions %}
+      <div class="medicine-search">
+        <label for="suggestion-search">Search improvements</label>
+        <input id="suggestion-search" type="search" placeholder="Search by documentation title" autocomplete="off" aria-controls="suggestion-list">
+      </div>
+      <div class="list-stack dashboard-search-list" id="suggestion-list">
+        {% for suggestion in suggestions %}<a class="list-row plain dashboard-search-row" data-search="{{ suggestion.document_title|lower }}" href="{{ url_for('clinical.suggestion_detail', suggestion_id=suggestion.id) }}"><span><strong>{{ suggestion.document_title }}</strong><small>{{ suggestion.assessment_count }} assessment(s) contributed · source v{{ suggestion.source_version }}</small></span><span>Review →</span></a>{% endfor %}
+      </div>
+      <div class="empty-state dashboard-no-results" id="suggestion-no-results" hidden><strong>No improvements found</strong><span>Try another title.</span></div>
+      {% else %}<div class="empty-state"><strong>No suggestions waiting</strong><span>Nothing changes without clinician approval.</span></div>{% endif %}
+    </div>
+  </details>
 </div>
+<script>
+  (() => {
+    const bindSearch = (inputId, listId, emptyId) => {
+      const search = document.getElementById(inputId);
+      const list = document.getElementById(listId);
+      if (!search || !list) return;
+      const rows = [...list.querySelectorAll("[data-search]")];
+      const noResults = document.getElementById(emptyId);
+      search.addEventListener("input", () => {
+        const query = search.value.trim().toLocaleLowerCase();
+        let visibleCount = 0;
+        rows.forEach((row) => {
+          const matches = row.dataset.search.includes(query);
+          row.hidden = !matches;
+          visibleCount += Number(matches);
+        });
+        noResults.hidden = visibleCount !== 0;
+      });
+    };
+    bindSearch("patient-search", "patient-list", "patient-no-results");
+    bindSearch("suggestion-search", "suggestion-list", "suggestion-no-results");
+
+    const sections = document.querySelector(".workspace-sections");
+    if (!sections) return;
+    let lockedHeight = 0;
+    const rememberOpenHeight = () => {
+      const height = Math.ceil(sections.getBoundingClientRect().height);
+      if (height <= lockedHeight) return;
+      lockedHeight = height;
+      sections.style.minHeight = `${height}px`;
+    };
+    sections.querySelectorAll(":scope > details").forEach((panel) => {
+      panel.addEventListener("toggle", () => {
+        if (panel.open) requestAnimationFrame(rememberOpenHeight);
+      });
+    });
+  })();
+</script>
 {% endblock %}

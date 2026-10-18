@@ -1021,9 +1021,9 @@ table.queue-table td.wrap a { font-weight: var(--weight-medium); }
 .medicines-library-content { padding: 0 var(--space-5) var(--space-5); }
 .documentation-stack { display: grid; gap: var(--space-4); }
 .documentation-stack > .panel { margin-bottom: 0; }
-.documentation-disclosure-content > .stack-form { max-width: 48rem; margin-top: var(--space-5); }
-.document-list { margin-top: var(--space-5); }
-.document-row[hidden], .document-no-results[hidden] { display: none; }
+.create-documentation .stack-form { max-width: 48rem; }
+.document-list, .dashboard-search-list { margin-top: var(--space-5); }
+.document-row[hidden], .document-no-results[hidden], .dashboard-search-row[hidden], .dashboard-no-results[hidden] { display: none; }
 .patient-assignment-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-4); margin: var(--space-5) 0 0; }
 .medicine-search { max-width: 30rem; margin-top: var(--space-5); }
 .medicine-search label { margin-bottom: var(--space-2); color: var(--ink); font-weight: var(--weight-semibold); }
@@ -1156,7 +1156,12 @@ table.queue-table td.wrap a { font-weight: var(--weight-medium); }
 .workflow-nav strong { display: block; font-size: var(--type-sm); font-weight: var(--weight-semibold); line-height: 1.4; }
 .workflow-nav small { display: block; font-size: var(--type-xs); line-height: 1.55; color: var(--ink-muted); margin-top: var(--space-1); }
 .workflow-arrow { color: var(--accent); font-size: var(--type-sm); }
-.workspace-sections { gap: var(--space-5); }
+.workspace-sections { --library-cap: 30rem; gap: var(--space-5); }
+body:has(.workspace-sections) .shell { padding-bottom: var(--space-3); }
+body:has(.workspace-sections) .site-footer { margin-top: var(--space-3); }
+.workspace-sections > .medicines-library { min-height: 0; max-height: var(--library-cap); align-self: start; overflow: hidden; }
+.workspace-sections > .medicines-library[open] > .medicines-library-content { max-height: calc(var(--library-cap) - 6.75rem); overflow: auto; padding-top: 0; }
+.workspace-sections > .medicines-library[open] .medicine-search { position: sticky; top: 0; z-index: 1; margin-top: 0; padding: var(--space-5) 0 var(--space-3); background: var(--panel-bg); }
 .workflow-layout .panel-heading, .workspace-sections .panel-heading { margin-bottom: var(--space-5); gap: var(--space-3); flex-wrap: wrap; }
 .workflow-layout .panel-heading h2, .workspace-sections .panel-heading h2 { line-height: 1.4; letter-spacing: -.025em; }
 .workflow-layout .list-row, .workspace-sections .list-row { padding-block: var(--space-4); }
@@ -1166,7 +1171,6 @@ table.queue-table td.wrap a { font-weight: var(--weight-medium); }
 .workspace-sections .data-table th, .workspace-sections .data-table td { padding-inline: var(--space-4); }
 .workspace-sections .data-table td:last-child { padding-right: var(--space-5); }
 .workspace-sections .data-table td:first-child, .workspace-sections .data-table th:first-child { padding-left: var(--space-5); }
-.workspace-sections .activity-feed { gap: var(--space-5); }
 .report-heading { padding: var(--space-4) 0 var(--space-5); border-bottom: 1px solid var(--panel-border); margin-bottom: var(--space-6); align-items: center; }
 .report-heading h1 { font-size: clamp(2.5rem, 5vw, 3.6rem); }
 .report-heading .lede { margin-bottom: 0; }
@@ -1281,6 +1285,7 @@ table.queue-table td.wrap a { font-weight: var(--weight-medium); }
   .public-nav { justify-content: space-between; }
   .split-heading { flex-direction: column; }
   .dashboard-grid, .two-col, .two-col.wide-left, .comparison-grid { grid-template-columns: 1fr; }
+  .workspace-sections { --library-cap: 24rem; }
   .span-2 { grid-column: span 1; }
   .activity-feed { grid-template-columns: 1fr; }
   .patient-med-card { grid-template-columns: 1fr; gap: var(--space-3); }

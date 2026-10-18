@@ -22,7 +22,8 @@ def test_clinician_and_patient_login_redirect_to_role_dashboard(client, login):
 def test_role_routes_and_csrf_are_enforced(client, login):
     login(client, "alex.patient@demo.test", "DemoPatient!2026")
     assert client.get("/clinician").status_code == 403
-    assert client.get("/document-testing").status_code == 403
+    assert client.get("/clinician/documents").status_code == 403
+    assert client.get("/clinician/reports").status_code == 403
     assert client.post("/patient/clarification", data={"assignment_id": "1", "message": "test"}).status_code == 400
 
 

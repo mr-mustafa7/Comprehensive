@@ -17,16 +17,8 @@
     <nav class="primary-nav" aria-label="Primary">
       {% if current_user.role == 'clinician' %}
       <a class="nav-pill" href="{{ url_for('clinical.clinician_dashboard') }}" {% if active == 'clinician' %}aria-current="page"{% endif %}>Dashboard</a>
+      <a class="nav-pill" href="{{ url_for('clinical.clinician_reports') }}" {% if active == 'reports' %}aria-current="page"{% endif %}>Reports</a>
       <a class="nav-pill" href="{{ url_for('clinical.documents') }}" {% if active == 'documents' %}aria-current="page"{% endif %}>Documentation</a>
-      <details class="nav-dropdown">
-        <summary class="nav-pill {{ 'nav-section-active' if active in ['evaluation', 'index', 'queue'] else '' }}">Testing<span class="nav-label-extra"> &amp; evaluation</span> <span class="nav-chevron" aria-hidden="true">⌄</span></summary>
-        <div class="nav-dropdown-menu">
-          <span class="eyebrow">Testing workspace</span>
-          <a href="{{ url_for('clinical.usage_evaluation') }}" {% if active == 'evaluation' %}aria-current="page"{% endif %}><strong>Usage evaluation</strong><small>Explore the usage comparison results.</small></a>
-          <a href="{{ url_for('index') }}" {% if active == 'index' %}aria-current="page"{% endif %}><strong>Pre-release testing</strong><small>Check documentation with simulated readers.</small></a>
-          <a href="{{ url_for('queue') }}" {% if active == 'queue' %}aria-current="page"{% endif %}><strong>Test queue{% if pending_count %} <span class="nav-count">{{ pending_count }}</span>{% endif %}</strong><small>Review flagged document checks.</small></a>
-        </div>
-      </details>
       {% else %}
       <a class="nav-pill" href="{{ url_for('clinical.patient_dashboard') }}" {% if active == 'patient' %}aria-current="page"{% endif %}>My medicines</a>
       <a class="nav-pill" href="{{ url_for('clinical.patient_report') }}">Report use</a>

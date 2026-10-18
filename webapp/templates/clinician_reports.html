@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Reports — Comprehensive{% endblock %}
+{% block content %}
+<div class="page-heading"><span class="eyebrow">Clinical workspace</span><h1>Reports</h1><p class="lede">Recent medication-use reports from assigned patients.</p></div>
+<section class="panel" id="recent-reports">
+  <div class="panel-heading"><div><span class="eyebrow">Patient reports</span><span class="activity-summary-row"><h2>Recent medication-use reports</h2><span class="count-badge">{{ reports|length }}</span></span></div></div>
+  {% if reports %}
+  <div class="table-scroll"><table class="data-table report-table" role="table" aria-label="Recent medication-use reports"><thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Patient</th><th scope="col" role="columnheader">Medication</th><th scope="col" role="columnheader">Reported</th><th scope="col" role="columnheader">Assessment</th><th scope="col" role="columnheader"><span class="visually-hidden">Actions</span></th></tr></thead><tbody role="rowgroup">
+    {% for report in reports %}<tr role="row">
+      <td role="cell" data-label="Patient"><a href="{{ url_for('clinical.clinician_patient', patient_id=report.patient_id) }}">{{ patient_names.get(report.patient_id, '') }}</a></td>
+      <td role="cell" data-label="Medication">{{ report.medication_name }} <span class="muted">v{{ report.version_number }}</span></td>
+      <td role="cell" data-label="Reported">{{ report.reported_usage_date }}</td>
+      <td role="cell" data-label="Assessment"><span class="assessment-chip {{ report.assessment_status }}">{{ (report.assessment_status or 'pending').replace('_', ' ') }}</span>{% if report.review_decision %}<span class="reviewed-mark">Reviewed</span>{% endif %}</td>
+      <td role="cell" class="report-row-action"><a class="text-link" aria-label="Inspect report {{ report.id }}" href="{{ url_for('clinical.clinician_report', report_id=report.id) }}">Inspect <span aria-hidden="true">→</span></a></td>
+    </tr>{% endfor %}
+  </tbody></table></div>
+  {% else %}<div class="empty-state"><strong>No reports yet</strong><span>Patient reports will appear here.</span></div>{% endif %}
+</section>
+{% endblock %}

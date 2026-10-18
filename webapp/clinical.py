@@ -2,10 +2,8 @@
 
 from __future__ import annotations
 
-import json
 from io import BytesIO
 from datetime import date
-from pathlib import Path
 from urllib.parse import urlparse
 
 from flask import Blueprint, abort, current_app, flash, g, redirect, render_template, request, send_file, session, url_for
@@ -19,7 +17,6 @@ from webapp import clinical_store
 from webapp.security import csrf_token, login_required, role_required, valid_password
 
 bp = Blueprint("clinical", __name__)
-ROOT = Path(__file__).resolve().parent.parent
 
 
 def _safe_next(value: str | None) -> str | None:
@@ -105,17 +102,20 @@ def clinician_dashboard():
     return render_template(
         "clinician_dashboard.html", patients=patients, reports=reports, pending=pending,
         suggestions=suggestions, documents=clinical_store.list_documents(g.user["id"]),
-        activity=clinical_store.recent_audit(g.user["id"]),
         clarifications=clinical_store.count_open_clarifications(g.user["id"]), active="clinician",
     )
 
 
-@bp.get("/clinician/usage-evaluation")
+@bp.get("/clinician/reports")
 @role_required("clinician")
-def usage_evaluation():
-    path = ROOT / "outputs" / "usage_eval_results.json"
-    results = json.loads(path.read_text()) if path.exists() else None
-    return render_template("usage_evaluation.html", results=results, active="evaluation")
+def clinician_reports():
+    patients = clinical_store.list_patients(g.user["id"])
+    return render_template(
+        "clinician_reports.html",
+        reports=clinical_store.list_reports_for_clinician(g.user["id"]),
+        patient_names={patient["id"]: patient["display_name"] for patient in patients},
+        active="reports",
+    )
 
 
 @bp.post("/clinician/invitations")

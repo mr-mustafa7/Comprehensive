@@ -104,7 +104,10 @@ def test_vercel_entrypoint_is_the_root_flask_app():
     root = Path(__file__).resolve().parents[1]
     pyproject = (root / "pyproject.toml").read_text()
     entry = (root / "app.py").read_text()
+    assert "[project]" in pyproject
+    assert "flask>=" in pyproject
     assert 'entrypoint = "app:app"' in pyproject
+    assert "package = false" in pyproject
     assert "app = create_app()" in entry
 
 

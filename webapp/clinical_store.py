@@ -659,11 +659,28 @@ def count_open_clarifications(clinician_id: int) -> int:
 
 
 def seed_demo_data() -> dict:
-    """Idempotently create an entirely fictional demonstration organisation."""
+    """Idempotently create the sample organisation and accounts."""
     init_db()
     with _connect() as conn:
         existing = conn.execute("SELECT id FROM users WHERE email = 'clinician@demo.test'").fetchone()
         if existing:
+            conn.execute("UPDATE organisations SET name = 'Comprehensive Clinic' WHERE name = 'Comprehensive Demo Clinic'")
+            conn.execute(
+                """UPDATE medication_documents
+                   SET source = 'Clinician-authored supplementary documentation',
+                       provenance = 'Clinician-authored; not a manufacturer leaflet'
+                   WHERE source = 'Fictional clinician-authored demo'""",
+            )
+            conn.execute(
+                """UPDATE regimens SET conditions = 'Contact the clinic if the written documentation is unclear.'
+                   WHERE conditions = 'Contact the fictional demo clinic if the written documentation is unclear.'""",
+            )
+            conn.execute(
+                """UPDATE document_suggestions
+                   SET rationale = 'Clinician-approved supplementary wording.'
+                   WHERE rationale = 'Clinician-approved supplementary wording for the synthetic demo.'""",
+            )
+            conn.execute("UPDATE audit_events SET action = 'workspace.seeded' WHERE action = 'demo.seeded'")
             invite_hash = hashlib.sha256(b"demo-activate-fictional-patient-2026").hexdigest()
             if not conn.execute("SELECT 1 FROM invitations WHERE token_hash = ?", (invite_hash,)).fetchone():
                 expires = (datetime.now(timezone.utc) + timedelta(days=30)).isoformat(timespec="seconds")
@@ -673,7 +690,7 @@ def seed_demo_data() -> dict:
                 )
             return {"clinician_id": existing["id"]}
         timestamp = now()
-        org_id = conn.execute("INSERT INTO organisations (name, created_at) VALUES ('Comprehensive Demo Clinic', ?)", (timestamp,)).lastrowid
+        org_id = conn.execute("INSERT INTO organisations (name, created_at) VALUES ('Comprehensive Clinic', ?)", (timestamp,)).lastrowid
         clinician_id = conn.execute(
             "INSERT INTO users (email, password_hash, role, organisation_id, display_name, created_at) VALUES (?, ?, 'clinician', ?, ?, ?)",
             ("clinician@demo.test", generate_password_hash("DemoClinician!2026"), org_id, "Dr Mustafa Alhadad", timestamp),
@@ -694,7 +711,7 @@ def seed_demo_data() -> dict:
             patients.append(patient_id)
         document_id = conn.execute(
             "INSERT INTO medication_documents (title, source, provenance, uploaded_by, created_at) VALUES (?, ?, ?, ?, ?)",
-            ("Medicine A — supplementary instructions", "Fictional clinician-authored demo", "Synthetic hackathon demonstration; not a manufacturer's leaflet", clinician_id, timestamp),
+            ("Medicine A — supplementary documentation", "Clinician-authored supplementary documentation", "Clinician-authored; not a manufacturer's leaflet", clinician_id, timestamp),
         ).lastrowid
         v1 = conn.execute(
             """INSERT INTO document_versions
@@ -715,7 +732,7 @@ def seed_demo_data() -> dict:
                    (patient_id, document_id, medication_name, dose_quantity, dose_unit, frequency_per_day,
                     timing_instructions, conditions, effective_from, approval_status, approved_by, approved_at, created_at)
                    VALUES (?, ?, 'Medicine A', 1, 'tablet', 1, 'in the morning at the time agreed with your clinician',
-                           'Contact the fictional demo clinic if the written instruction is unclear.', '2026-10-01',
+                           'Contact the clinic if the written documentation is unclear.', '2026-10-01',
                            'approved', ?, ?, ?)""",
                 (patient_id, document_id, clinician_id, timestamp, timestamp),
             ).lastrowid
@@ -782,9 +799,9 @@ def seed_demo_data() -> dict:
                (document_version_id, proposed_wording, rationale, status, reviewed_by, review_reason, reviewed_at, created_version_id, created_at)
                VALUES (?, ?, ?, 'approved', ?, ?, ?, ?, ?)""",
             (v1, "Take one tablet once per day, in the morning at the time agreed with your clinician. Do not take an additional dose.",
-             "Clinician-approved supplementary wording for the synthetic demo.", clinician_id,
-             "Approved as a clearer supplementary instruction; regimen unchanged.", timestamp, v2, timestamp),
+             "Clinician-approved supplementary wording.", clinician_id,
+             "Approved as clearer supplementary documentation; regimen unchanged.", timestamp, v2, timestamp),
         ).lastrowid
         conn.execute("INSERT INTO suggestion_assessments VALUES (?, ?)", (approved_suggestion, discrepancy_assessment))
-        audit(clinician_id, "demo.seeded", "organisation", org_id, {"synthetic": True}, conn)
+        audit(clinician_id, "workspace.seeded", "organisation", org_id, {"synthetic": True}, conn)
         return {"clinician_id": clinician_id, "patient_ids": patients, "document_id": document_id}

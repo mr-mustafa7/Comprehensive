@@ -2,7 +2,7 @@
 {% block title %}Your report — Comprehensive{% endblock %}
 {% block content %}
 <a class="back-link" href="{{ url_for('clinical.patient_dashboard') }}">← My medicines</a>
-<div class="page-heading split-heading"><div><span class="eyebrow">Report from {{ report.reported_usage_date }}</span><h1>{{ report.medication_name }}</h1><p class="lede">Compared with the exact clinician-approved regimen and instruction version {{ report.version_number }}.</p></div><span class="assessment-chip large {{ report.assessment_status }}">{{ report.assessment_status.replace('_', ' ') }}</span></div>
+<div class="page-heading split-heading"><div><span class="eyebrow">Report from {{ report.reported_usage_date }}</span><h1>{{ report.medication_name }}</h1><p class="lede">Compared with the exact clinician-approved regimen and documentation version {{ report.version_number }}.</p></div><span class="assessment-chip large {{ report.assessment_status }}">{{ report.assessment_status.replace('_', ' ') }}</span></div>
 
 {% if report.assessment_status == 'review_required' %}<div class="patient-alert review"><strong>A possible difference needs clinician review.</strong><p>{{ report.assessment.patient_message }}</p></div>
 {% elif report.assessment_status == 'analysis_incomplete' %}<div class="patient-alert incomplete"><strong>The comparison could not be completed.</strong><p>{{ report.assessment.patient_message }}</p></div>
@@ -10,7 +10,7 @@
 
 <div class="comparison-grid">
   <section class="panel comparison-card reported"><span class="eyebrow">You reported</span><h2>{{ report.number_of_doses if report.number_of_doses is not none else 'Not remembered' }} dose(s) · {{ report.quantity_per_dose if report.quantity_per_dose is not none else 'Not remembered' }} {{ report.dose_unit }} each</h2><p>{{ report.timing_information or 'No timing provided' }}</p><blockquote>{{ report.explanation or 'No written description provided.' }}</blockquote></section>
-  <section class="panel comparison-card approved"><span class="eyebrow">Your clinician-approved instruction</span><div class="instruction-quote">{{ report.instruction_text }}</div><p>{{ report.dose_quantity|int if report.dose_quantity % 1 == 0 else report.dose_quantity }} {{ report.dose_unit }}, {{ report.frequency_per_day }} time(s) per day · {{ report.timing_instructions }}</p></section>
+  <section class="panel comparison-card approved"><span class="eyebrow">Your clinician-approved documentation</span><div class="instruction-quote">{{ report.instruction_text }}</div><p>{{ report.dose_quantity|int if report.dose_quantity % 1 == 0 else report.dose_quantity }} {{ report.dose_unit }}, {{ report.frequency_per_day }} time(s) per day · {{ report.timing_instructions }}</p></section>
 </div>
 
 {% if report.assessment.findings %}<section class="panel"><div class="panel-heading"><div><span class="eyebrow">Why it needs review</span><h2>Possible differences or missing details</h2></div></div><div class="finding-list">{% for finding in report.assessment.findings %}<article class="finding"><span class="finding-type">{{ finding.type.replace('_', ' ') }}</span><p>{{ finding.evidence }}</p></article>{% endfor %}</div></section>{% endif %}

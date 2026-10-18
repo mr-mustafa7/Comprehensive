@@ -1,20 +1,36 @@
 {% extends "base.html" %}
 {% block title %}My medicines — Comprehensive{% endblock %}
 {% block content %}
-<div class="page-heading patient-heading"><span class="eyebrow">Hello {{ current_user.display_name }}</span><h1>Your medication instructions</h1><p class="lede">Read the wording approved for you and report what you actually took. It is okay to say when you do not remember.</p></div>
-<div class="safety-note"><strong>This fictional demo does not give medical advice.</strong> Do not change what you take based on an assessment here. Contact your clinician or pharmacist for clarification; use your usual urgent-care service if you feel unwell or think you need urgent help.</div>
+<div class="page-heading patient-heading"><span class="eyebrow">Hello {{ current_user.display_name }}</span><h1>Your medication documentation</h1><p class="lede">Read the wording approved for you and report what you actually took. It is okay to say when you do not remember.</p></div>
 
-<section class="patient-assignment-grid">
-{% for assignment in assignments %}<article class="patient-med-card">
-  <div class="med-icon" aria-hidden="true">A</div>
-  <div class="med-content"><span class="eyebrow">Assigned instruction · v{{ assignment.version_number }}</span><h2>{{ assignment.medication_name }}</h2><p class="dose-line">{{ assignment.dose_quantity|int if assignment.dose_quantity % 1 == 0 else assignment.dose_quantity }} {{ assignment.dose_unit }} · {{ assignment.frequency_per_day }} time(s) each day</p><p>{{ assignment.timing_instructions }}</p>
-  <div class="card-actions"><a class="btn" href="{{ url_for('clinical.patient_report', assignment_id=assignment.id) }}">Report what I took</a><a class="btn ghost" href="{{ url_for('clinical.patient_assignment', assignment_id=assignment.id) }}">Read approved instructions</a></div></div>
-</article>{% else %}<div class="panel empty-state"><strong>No medication instructions assigned</strong><span>Your clinician's approved instructions will appear here.</span></div>{% endfor %}
-</section>
+<details class="panel medicines-library">
+  <summary>
+    <span><span class="eyebrow">My medicines</span><span class="medicine-library-title"><strong>Medication library</strong><span class="count-badge">{{ assignments|length }}</span></span></span>
+    <span class="medicine-library-chevron" aria-hidden="true">⌄</span>
+  </summary>
+  <div class="medicines-library-content">
+    {% if assignments %}
+    <div class="medicine-search">
+      <label for="medicine-search">Search your medicines</label>
+      <input id="medicine-search" type="search" placeholder="Search by medicine name" autocomplete="off" aria-controls="medicine-list">
+    </div>
+    {% endif %}
+
+    <section class="patient-assignment-grid" id="medicine-list" aria-label="Your medicines">
+    {% for assignment in assignments %}<article class="patient-med-card" data-medicine-name="{{ assignment.medication_name|lower }}">
+      <span class="med-icon" aria-hidden="true">{{ assignment.medication_name[:1]|upper }}</span>
+      <div class="med-content"><span class="eyebrow">Assigned documentation · v{{ assignment.version_number }}</span><span class="medicine-title">{{ assignment.medication_name }}</span><span class="dose-line">{{ assignment.dose_quantity|int if assignment.dose_quantity % 1 == 0 else assignment.dose_quantity }} {{ assignment.dose_unit }} · {{ assignment.frequency_per_day }} time(s) each day</span><p>{{ assignment.timing_instructions }}</p>
+        <div class="card-actions"><a class="btn" href="{{ url_for('clinical.patient_report', assignment_id=assignment.id) }}">Report what I took</a><a class="btn ghost" href="{{ url_for('clinical.patient_assignment', assignment_id=assignment.id) }}">Read approved documentation</a></div>
+      </div>
+    </article>{% else %}<div class="empty-state"><strong>No medication documentation assigned</strong><span>Your clinician's approved documentation will appear here.</span></div>{% endfor %}
+    <div class="panel empty-state medicine-no-results" id="medicine-no-results" hidden><strong>No medicines found</strong><span>Try another medicine name.</span></div>
+    </section>
+  </div>
+</details>
 
 <div class="two-col wide-left">
 <section class="panel"><div class="panel-heading"><div><span class="eyebrow">History</span><h2>Previous reports</h2></div></div>
-  {% if reports %}<div class="list-stack">{% for report in reports %}<a class="list-row plain" href="{{ url_for('clinical.patient_report_detail', report_id=report.id) }}"><span><strong>{{ report.reported_usage_date }} · {{ report.medication_name }}</strong><small>{{ report.number_of_doses if report.number_of_doses is not none else 'Not remembered' }} dose(s) · instruction v{{ report.version_number }}</small></span><span class="assessment-chip {{ report.assessment_status }}">{{ report.assessment_status.replace('_', ' ') }}</span></a>{% endfor %}</div>{% else %}<div class="empty-state"><strong>No reports yet</strong><span>Use “Report what I took” after an assigned fictional exercise.</span></div>{% endif %}
+  {% if reports %}<div class="list-stack">{% for report in reports %}<a class="list-row plain" href="{{ url_for('clinical.patient_report_detail', report_id=report.id) }}"><span><strong>{{ report.reported_usage_date }} · {{ report.medication_name }}</strong><small>{{ report.number_of_doses if report.number_of_doses is not none else 'Not remembered' }} dose(s) · documentation v{{ report.version_number }}</small></span><span class="assessment-chip {{ report.assessment_status }}">{{ report.assessment_status.replace('_', ' ') }}</span></a>{% endfor %}</div>{% else %}<div class="empty-state"><strong>No reports yet</strong><span>Use “Report what I took” after an assigned medicine.</span></div>{% endif %}
 </section>
 <section class="panel"><div class="panel-heading"><div><span class="eyebrow">Need help?</span><h2>Ask for clarification</h2></div></div>
   {% if assignments %}<form method="post" action="{{ url_for('clinical.clarification') }}" class="stack-form">
@@ -22,6 +38,25 @@
     <label>Medication<select name="assignment_id" required>{% for assignment in assignments %}<option value="{{ assignment.id }}">{{ assignment.medication_name }}</option>{% endfor %}</select></label>
     <label>Your question<textarea name="message" rows="4" maxlength="2000" required placeholder="Tell the clinician which part is unclear. Do not include urgent information here."></textarea></label>
     <button class="btn ghost">Send clarification request</button>
-  </form>{% else %}<p class="note">A clarification request can be sent once an instruction is assigned.</p>{% endif %}
+  </form>{% else %}<p class="note">A clarification request can be sent once documentation is assigned.</p>{% endif %}
 </section></div>
+<script>
+  (() => {
+    const search = document.getElementById("medicine-search");
+    if (!search) return;
+    const cards = [...document.querySelectorAll("[data-medicine-name]")];
+    const noResults = document.getElementById("medicine-no-results");
+
+    search.addEventListener("input", () => {
+      const query = search.value.trim().toLocaleLowerCase();
+      let visibleCount = 0;
+      cards.forEach((card) => {
+        const matches = card.dataset.medicineName.includes(query);
+        card.hidden = !matches;
+        visibleCount += Number(matches);
+      });
+      noResults.hidden = visibleCount !== 0;
+    });
+  })();
+</script>
 {% endblock %}

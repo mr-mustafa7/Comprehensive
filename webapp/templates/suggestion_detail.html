@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% block title %}Instruction suggestion — Comprehensive{% endblock %}
+{% block title %}Documentation suggestion — Comprehensive{% endblock %}
 {% block content %}
 <a class="back-link" href="{{ url_for('clinical.document_detail', document_id=suggestion.document_id) }}">← {{ suggestion.document_title }}</a>
-<div class="page-heading split-heading"><div><span class="eyebrow">Clinician-review-only draft</span><h1>Instruction improvement</h1><p class="lede">The original remains authoritative until a clinician approves a new supplementary version.</p></div><span class="assessment-chip {{ 'review_required' if suggestion.status == 'pending' else ('no_discrepancy_detected' if suggestion.status == 'approved' else 'neutral') }}">{{ suggestion.status }}</span></div>
+<div class="page-heading split-heading"><div><span class="eyebrow">Clinician-review-only draft</span><h1>Documentation improvement</h1><p class="lede">The original remains authoritative until a clinician approves a new supplementary version.</p></div><span class="assessment-chip {{ 'review_required' if suggestion.status == 'pending' else ('no_discrepancy_detected' if suggestion.status == 'approved' else 'neutral') }}">{{ suggestion.status }}</span></div>
 <div class="comparison-grid">
   <section class="panel comparison-card"><span class="eyebrow">Original · v{{ suggestion.source_version }}</span><blockquote>{{ suggestion.original_text }}</blockquote></section>
   <section class="panel comparison-card"><span class="eyebrow">Proposed wording</span><blockquote>{{ suggestion.proposed_wording }}</blockquote><p class="note">{{ suggestion.rationale }}</p></section>

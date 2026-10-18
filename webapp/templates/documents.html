@@ -1,24 +1,66 @@
 {% extends "base.html" %}
-{% block title %}Instruction library — Comprehensive{% endblock %}
+{% block title %}Documentation library — Comprehensive{% endblock %}
 {% block content %}
-<div class="page-heading"><span class="eyebrow">Controlled content</span><h1>Medication instructions</h1><p class="lede">Create clinician-authored supplementary instructions, preserve every version, and assign only approved wording. Manufacturer leaflets are never silently rewritten.</p></div>
-<div class="two-col wide-left">
-  <section class="panel">
-    <div class="panel-heading"><div><span class="eyebrow">Library</span><h2>Documents and versions</h2></div><span class="count-badge">{{ documents|length }}</span></div>
-    {% if documents %}<div class="list-stack">{% for document in documents %}<a class="list-row plain" href="{{ url_for('clinical.document_detail', document_id=document.id) }}"><span><strong>{{ document.title }}</strong><small>{{ document.source }} · {{ document.version_count }} version(s)</small></span><span>v{{ document.latest_approved_version }} →</span></a>{% endfor %}</div>{% else %}<div class="empty-state"><strong>No instructions yet</strong></div>{% endif %}
-  </section>
-  <section class="panel">
-    <div class="panel-heading"><div><span class="eyebrow">Create</span><h2>New approved instruction</h2></div></div>
-    <form method="post" enctype="multipart/form-data" class="stack-form">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-      <label>Title<input name="title" required placeholder="Medicine A — supplementary instructions"></label>
-      <label>Source<input name="source" required placeholder="Clinician-authored supplementary instruction"></label>
-      <label>Provenance<input name="provenance" required placeholder="Synthetic demo; not a manufacturer leaflet"></label>
-      <label>Upload UTF-8 instruction text (optional)<input type="file" name="document_file" accept=".txt,.md,text/plain,text/markdown"></label>
-      <label>Or enter approved instruction text<textarea name="text" rows="7" placeholder="Enter the exact wording approved for assignment."></textarea></label>
-      <button class="btn">Create approved version 1</button>
-    </form>
-  </section>
+<div class="page-heading"><span class="eyebrow">Controlled content</span><h1>Medication documentation</h1><p class="lede">Create clinician-authored supplementary documentation, preserve every version, and assign only approved wording. Manufacturer leaflets are never silently rewritten.</p></div>
+<div class="documentation-stack">
+  <details class="panel medicines-library documentation-disclosure">
+    <summary>
+      <span><span class="eyebrow">Create</span><span class="medicine-library-title"><strong>New approved documentation</strong></span></span>
+      <span class="medicine-library-chevron" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="medicines-library-content documentation-disclosure-content">
+      <form method="post" enctype="multipart/form-data" class="stack-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label>Title<input name="title" required placeholder="Medicine A — supplementary documentation"></label>
+        <label>Source<input name="source" required placeholder="Clinician-authored supplementary documentation"></label>
+        <label>Provenance<input name="provenance" required placeholder="Clinician-authored; not a manufacturer leaflet"></label>
+        <label>Upload UTF-8 documentation text (optional)<input type="file" name="document_file" accept=".txt,.md,text/plain,text/markdown"></label>
+        <label>Or enter approved documentation text<textarea name="text" rows="7" placeholder="Enter the exact wording approved for assignment."></textarea></label>
+        <button class="btn">Create approved version 1</button>
+      </form>
+    </div>
+  </details>
+
+  <details class="panel medicines-library documentation-disclosure">
+    <summary>
+      <span><span class="eyebrow">Library</span><span class="medicine-library-title"><strong>Documents and versions</strong><span class="count-badge">{{ documents|length }}</span></span></span>
+      <span class="medicine-library-chevron" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="medicines-library-content documentation-disclosure-content">
+      {% if documents %}
+      <div class="medicine-search">
+        <label for="document-search">Search documentation</label>
+        <input id="document-search" type="search" placeholder="Search by title or source" autocomplete="off" aria-controls="document-list">
+      </div>
+      <div class="list-stack document-list" id="document-list">
+        {% for document in documents %}<a class="list-row plain document-row" data-document-search="{{ (document.title ~ ' ' ~ document.source)|lower }}" href="{{ url_for('clinical.document_detail', document_id=document.id) }}"><span><strong>{{ document.title }}</strong><small>{{ document.source }} · {{ document.version_count }} version(s)</small></span><span>v{{ document.latest_approved_version }} →</span></a>{% endfor %}
+      </div>
+      <div class="empty-state document-no-results" id="document-no-results" hidden><strong>No documentation found</strong><span>Try another title or source.</span></div>
+      {% else %}
+      <div class="empty-state"><strong>No documentation yet</strong></div>
+      {% endif %}
+    </div>
+  </details>
 </div>
 <div class="safety-note page-note"><strong>Separate pre-release feature:</strong> use the <a href="{{ url_for('index') }}">simulated-reader document testing workspace</a> for document-level comprehension checks. Patient reports use the approved patient-specific regimen instead.</div>
+
+<script>
+  (() => {
+    const search = document.getElementById("document-search");
+    if (!search) return;
+    const rows = [...document.querySelectorAll("[data-document-search]")];
+    const noResults = document.getElementById("document-no-results");
+
+    search.addEventListener("input", () => {
+      const query = search.value.trim().toLocaleLowerCase();
+      let visibleCount = 0;
+      rows.forEach((row) => {
+        const matches = row.dataset.documentSearch.includes(query);
+        row.hidden = !matches;
+        visibleCount += Number(matches);
+      });
+      noResults.hidden = visibleCount !== 0;
+    });
+  })();
+</script>
 {% endblock %}

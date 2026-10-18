@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block title %}{{ document.title }} — Comprehensive{% endblock %}
 {% block content %}
-<a class="back-link" href="{{ url_for('clinical.documents') }}">← Instruction library</a>
-<div class="page-heading"><span class="eyebrow">Version-controlled instruction</span><h1>{{ document.title }}</h1><p class="lede">{{ document.source }} · {{ document.provenance }}</p></div>
+<a class="back-link" href="{{ url_for('clinical.documents') }}">← Documentation library</a>
+<div class="page-heading"><span class="eyebrow">Version-controlled documentation</span><h1>{{ document.title }}</h1><p class="lede">{{ document.source }} · {{ document.provenance }}</p></div>
 <div class="two-col wide-left">
   <section>
     {% for version in document.versions %}<article class="panel version-card">

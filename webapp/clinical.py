@@ -3,14 +3,17 @@
 from __future__ import annotations
 
 import json
+from io import BytesIO
 from datetime import date
 from pathlib import Path
 from urllib.parse import urlparse
 
-from flask import Blueprint, abort, current_app, flash, g, redirect, render_template, request, session, url_for
+from flask import Blueprint, abort, current_app, flash, g, redirect, render_template, request, send_file, session, url_for
 from werkzeug.security import check_password_hash
+from werkzeug.utils import secure_filename
 
 from src.document_feedback import suggest_improvement
+from src.document_summary import summarize_assignment
 from src.usage_assessment import ClaudeUsageAdapter, assess_usage, validate_assessment
 from webapp import clinical_store
 from webapp.security import csrf_token, login_required, role_required, valid_password
@@ -54,7 +57,7 @@ def login():
             destination = url_for("clinical.clinician_dashboard" if user["role"] == "clinician" else "clinical.patient_dashboard")
             return redirect(_safe_next(request.form.get("next")) or destination)
         flash("Email or password was not recognised.", "error")
-    return render_template("login.html", next=_safe_next(request.args.get("next")), active="login")
+    return render_template("signin.html", next=_safe_next(request.args.get("next")), active="login")
 
 
 @bp.post("/logout")
@@ -128,7 +131,7 @@ def invite_patient():
         flash(str(exc), "error")
     else:
         # The raw single-use token is shown once; only its SHA-256 hash is stored.
-        flash(f"Invitation created. Demo activation link: {url_for('clinical.activate', token=token, _external=True)}", "success")
+        flash(f"Invitation created. Activation link: {url_for('clinical.activate', token=token, _external=True)}", "success")
     return redirect(url_for("clinical.clinician_dashboard"))
 
 
@@ -180,21 +183,21 @@ def documents():
         uploaded = request.files.get("document_file")
         if uploaded and uploaded.filename:
             if not uploaded.filename.lower().endswith((".txt", ".md")):
-                flash("Upload a UTF-8 .txt or .md instruction file.", "error")
+                flash("Upload a UTF-8 .txt or .md documentation file.", "error")
                 return render_template("documents.html", documents=clinical_store.list_documents(g.user["id"]), active="documents")
             raw = uploaded.read(128 * 1024 + 1)
             if len(raw) > 128 * 1024:
-                flash("Instruction text files must be 128 KB or smaller.", "error")
+                flash("Documentation text files must be 128 KB or smaller.", "error")
                 return render_template("documents.html", documents=clinical_store.list_documents(g.user["id"]), active="documents")
             try:
                 text = raw.decode("utf-8").strip()
             except UnicodeDecodeError:
-                flash("The instruction file must use UTF-8 text encoding.", "error")
+                flash("The documentation file must use UTF-8 text encoding.", "error")
                 return render_template("documents.html", documents=clinical_store.list_documents(g.user["id"]), active="documents")
         source = request.form.get("source", "").strip()
         provenance = request.form.get("provenance", "").strip()
         if not title or not text or not source or not provenance:
-            flash("Title, source, provenance, and approved instruction text are required.", "error")
+            flash("Title, source, provenance, and approved documentation text are required.", "error")
         else:
             document_id, _ = clinical_store.create_document(g.user["id"], title, source, provenance, text)
             flash("Document and approved version 1 created.", "success")
@@ -232,7 +235,8 @@ def review_assessment(assessment_id: int):
         flash("Record a reason for the review decision.", "error")
         return redirect(request.referrer or url_for("clinical.clinician_dashboard"))
     try:
-        clinical_store.review_assessment(assessment_id, g.user["id"], decision, reason, request.form.get("amended_findings", ""))
+        amendment = reason if decision == "amended" else ""
+        clinical_store.review_assessment(assessment_id, g.user["id"], decision, reason, amendment)
     except (ValueError, PermissionError):
         abort(404)
     flash("Clinician review decision recorded for later evaluation.", "success")
@@ -281,7 +285,28 @@ def patient_assignment(assignment_id: int):
     assignment = clinical_store.get_assignment(assignment_id)
     if not assignment or assignment["patient_id"] != g.user["id"]:
         abort(404)
-    return render_template("patient_assignment.html", assignment=assignment, active="patient")
+    summary = summarize_assignment(
+        assignment,
+        use_ai=current_app.config.get("DOCUMENT_SUMMARY_PROVIDER") == "claude",
+    )
+    return render_template("patient_assignment.html", assignment=assignment, summary=summary, active="patient")
+
+
+@bp.get("/patient/assignments/<int:assignment_id>/download")
+@role_required("patient")
+def patient_assignment_download(assignment_id: int):
+    assignment = clinical_store.get_assignment(assignment_id)
+    if not assignment or assignment["patient_id"] != g.user["id"]:
+        abort(404)
+    filename = secure_filename(
+        f"{assignment['medication_name']}-approved-v{assignment['version_number']}.txt"
+    ) or f"approved-document-v{assignment['version_number']}.txt"
+    return send_file(
+        BytesIO(assignment["instruction_text"].encode("utf-8")),
+        mimetype="text/plain; charset=utf-8",
+        as_attachment=True,
+        download_name=filename,
+    )
 
 
 @bp.route("/patient/report", methods=["GET", "POST"])
@@ -301,9 +326,9 @@ def patient_report():
             if not uncertain and (doses is None or quantity is None):
                 raise ValueError("Provide dose details or select the uncertainty option.")
             if doses is not None and (doses < 0 or doses > 48):
-                raise ValueError("Number of doses is outside the supported demo range.")
+                raise ValueError("Number of doses is outside the supported range.")
             if quantity is not None and (quantity <= 0 or quantity > 100):
-                raise ValueError("Quantity is outside the supported demo range.")
+                raise ValueError("Quantity is outside the supported range.")
             usage_date = request.form.get("reported_usage_date", "")
             if not usage_date or usage_date > date.today().isoformat():
                 raise ValueError("Choose today or an earlier date.")
@@ -328,7 +353,7 @@ def patient_report():
         except PermissionError:
             abort(404)
         else:
-            flash("Your actual-use report was recorded and compared with the approved instructions.", "success")
+            flash("Your actual-use report was recorded and compared with the approved documentation.", "success")
             return redirect(url_for("clinical.patient_report_detail", report_id=report_id))
     return render_template("patient_report_form.html", assignments=assignments, selected=selected, today=date.today().isoformat(), active="patient")
 

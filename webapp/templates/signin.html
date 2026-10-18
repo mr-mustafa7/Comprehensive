@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Sign in — Comprehensive{% endblock %}
+{% block content %}
+<div class="signin-layout">
+  <h1 class="signin-welcome">Welcome back.</h1>
+  <section class="panel auth-card signin-card" aria-labelledby="sign-in-title">
+    <h2 id="sign-in-title">Sign in</h2>
+    <p class="note auth-description">Enter your account details to continue.</p>
+    <form method="post" class="stack-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <input type="hidden" name="next" value="{{ next or '' }}">
+      <label>Email address<input type="email" name="email" autocomplete="username" required></label>
+      <label>Password<input type="password" name="password" autocomplete="current-password" required></label>
+      <button class="btn" type="submit">Sign in <span aria-hidden="true">→</span></button>
+    </form>
+    <div class="demo-credentials">
+      <strong>Test accounts</strong>
+      <code>clinician@demo.test</code><span>DemoClinician!2026</span>
+      <code>alex.patient@demo.test</code><span>DemoPatient!2026</span>
+    </div>
+  </section>
+</div>
+{% endblock %}

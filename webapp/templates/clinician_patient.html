@@ -2,13 +2,13 @@
 {% block title %}{{ patient.display_name }} — Comprehensive{% endblock %}
 {% block content %}
 <a class="back-link" href="{{ url_for('clinical.clinician_dashboard') }}">← Clinician dashboard</a>
-<div class="page-heading split-heading"><div><span class="eyebrow">Fictional patient</span><h1>{{ patient.display_name }}</h1><p class="lede">{{ patient.email }} · all reports remain tied to the exact regimen and document version used at submission.</p></div></div>
+<div class="page-heading split-heading"><div><span class="eyebrow">Patient profile</span><h1>{{ patient.display_name }}</h1><p class="lede">{{ patient.email }} · all reports remain tied to the exact regimen and document version used at submission.</p></div></div>
 
 <section class="panel">
-  <div class="panel-heading"><div><span class="eyebrow">Current instructions</span><h2>Assigned medication</h2></div></div>
+  <div class="panel-heading"><div><span class="eyebrow">Current documentation</span><h2>Assigned medication</h2></div></div>
   {% if assignments %}
   <div class="card-grid">{% for a in assignments %}<article class="assignment-card {{ a.status }}"><div><span class="assessment-chip {{ 'no_discrepancy_detected' if a.status == 'active' else 'neutral' }}">{{ a.status }}</span><h3>{{ a.medication_name }}</h3><p>{{ a.dose_quantity|int if a.dose_quantity % 1 == 0 else a.dose_quantity }} {{ a.dose_unit }} · {{ a.frequency_per_day }} time(s) daily</p><small>{{ a.timing_instructions }} · {{ a.document_title }} v{{ a.version_number }}</small></div><a href="{{ url_for('clinical.document_detail', document_id=a.document_id) }}">Version history →</a></article>{% endfor %}</div>
-  {% else %}<div class="empty-state"><strong>No medication assigned</strong><span>Assign an approved fictional instruction below.</span></div>{% endif %}
+  {% else %}<div class="empty-state"><strong>No medication assigned</strong><span>Assign an approved documentation set below.</span></div>{% endif %}
 </section>
 
 <div class="two-col">
@@ -16,12 +16,12 @@
   <div class="panel-heading"><div><span class="eyebrow">New assignment</span><h2>Approve patient-specific regimen</h2></div></div>
   <form method="post" action="{{ url_for('clinical.assign_patient', patient_id=patient.id) }}" class="stack-form">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <label>Approved instruction version<select name="document_version_id" required><option value="">Select a version</option>{% for v in approved_versions %}<option value="{{ v.id }}">{{ v.title }} · v{{ v.version_number }}</option>{% endfor %}</select></label>
-    <label>Fictional medication name<input name="medication_name" required value="Medicine A"></label>
+    <label>Approved documentation version<select name="document_version_id" required><option value="">Select a version</option>{% for v in approved_versions %}<option value="{{ v.id }}">{{ v.title }} · v{{ v.version_number }}</option>{% endfor %}</select></label>
+    <label>Medication name<input name="medication_name" required value="Medicine A"></label>
     <div class="form-grid"><label>Quantity each time<input type="number" min="0.01" step="0.01" name="dose_quantity" required value="1"></label><label>Unit<input name="dose_unit" required value="tablet"></label></div>
     <label>Times per day<input type="number" min="1" max="24" name="frequency_per_day" required value="1"></label>
-    <label>Timing instructions<input name="timing_instructions" required value="in the morning at the time agreed with your clinician"></label>
-    <label>Conditions or exceptions<textarea name="conditions" rows="3">Contact the fictional demo clinic if the written instruction is unclear.</textarea></label>
+    <label>Timing documentation<input name="timing_instructions" required value="in the morning at the time agreed with your clinician"></label>
+    <label>Conditions or exceptions<textarea name="conditions" rows="3">Contact the clinic if the written documentation is unclear.</textarea></label>
     <label>Effective from<input type="date" name="effective_from"></label>
     <button class="btn">Approve and assign regimen</button>
   </form>

@@ -6,7 +6,7 @@
 <title>{% block title %}Comprehensive{% endblock %}</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
+<body class="{% block body_class %}workspace-page{% endblock %}">
 
 <a class="skip-link" href="#main">Skip to main content</a>
 
@@ -14,21 +14,36 @@
   <div class="masthead-inner">
     <a class="brand" href="{{ url_for('home') }}"><span class="brand-mark">C</span><span>Comprehensive</span></a>
     {% if current_user %}
-    <nav aria-label="Primary">
+    <nav class="primary-nav" aria-label="Primary">
       {% if current_user.role == 'clinician' %}
-      <a class="nav-pill" href="{{ url_for('clinical.clinician_dashboard') }}" {{ 'aria-current="page"' if active == 'clinician' else '' }}>Dashboard</a>
-      <a class="nav-pill" href="{{ url_for('clinical.documents') }}" {{ 'aria-current="page"' if active == 'documents' else '' }}>Instructions</a>
-      <a class="nav-pill secondary-nav" href="{{ url_for('clinical.usage_evaluation') }}" {{ 'aria-current="page"' if active == 'evaluation' else '' }}>Usage evaluation</a>
-      <a class="nav-pill secondary-nav" href="{{ url_for('index') }}" {{ 'aria-current="page"' if active == 'index' else '' }}>Pre-release testing</a>
-      <a class="nav-pill secondary-nav" href="{{ url_for('queue') }}" {{ 'aria-current="page"' if active == 'queue' else '' }}>Test queue{% if pending_count %} <span class="nav-count">{{ pending_count }}</span>{% endif %}</a>
+      <a class="nav-pill" href="{{ url_for('clinical.clinician_dashboard') }}" {% if active == 'clinician' %}aria-current="page"{% endif %}>Dashboard</a>
+      <a class="nav-pill" href="{{ url_for('clinical.documents') }}" {% if active == 'documents' %}aria-current="page"{% endif %}>Documentation</a>
+      <details class="nav-dropdown">
+        <summary class="nav-pill {{ 'nav-section-active' if active in ['evaluation', 'index', 'queue'] else '' }}">Testing<span class="nav-label-extra"> &amp; evaluation</span> <span class="nav-chevron" aria-hidden="true">⌄</span></summary>
+        <div class="nav-dropdown-menu">
+          <span class="eyebrow">Testing workspace</span>
+          <a href="{{ url_for('clinical.usage_evaluation') }}" {% if active == 'evaluation' %}aria-current="page"{% endif %}><strong>Usage evaluation</strong><small>Explore the usage comparison results.</small></a>
+          <a href="{{ url_for('index') }}" {% if active == 'index' %}aria-current="page"{% endif %}><strong>Pre-release testing</strong><small>Check documentation with simulated readers.</small></a>
+          <a href="{{ url_for('queue') }}" {% if active == 'queue' %}aria-current="page"{% endif %}><strong>Test queue{% if pending_count %} <span class="nav-count">{{ pending_count }}</span>{% endif %}</strong><small>Review flagged document checks.</small></a>
+        </div>
+      </details>
       {% else %}
-      <a class="nav-pill" href="{{ url_for('clinical.patient_dashboard') }}" {{ 'aria-current="page"' if active == 'patient' else '' }}>My medicines</a>
+      <a class="nav-pill" href="{{ url_for('clinical.patient_dashboard') }}" {% if active == 'patient' %}aria-current="page"{% endif %}>My medicines</a>
       <a class="nav-pill" href="{{ url_for('clinical.patient_report') }}">Report use</a>
       {% endif %}
       <form method="post" action="{{ url_for('clinical.logout') }}" class="nav-form">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <button class="nav-pill nav-button" type="submit">Sign out</button>
       </form>
+    </nav>
+    {% elif request.endpoint == 'home' %}
+    <nav class="primary-nav public-nav" aria-label="Primary">
+      <a class="nav-pill" href="#how-it-works">How it works</a>
+      <a class="btn" href="{{ url_for('clinical.login') }}">Sign in <span aria-hidden="true">→</span></a>
+    </nav>
+    {% elif request.endpoint == 'clinical.login' %}
+    <nav class="primary-nav public-nav" aria-label="Primary">
+      <a class="btn back-overview-button" href="{{ url_for('home') }}"><span aria-hidden="true">←</span> Back to overview</a>
     </nav>
     {% endif %}
   </div>
@@ -40,6 +55,13 @@
   {% endfor %}
   {% block content %}{% endblock %}
 </main>
+
+<footer class="site-footer">
+  <div>
+    <a class="footer-brand brand-mark" href="{{ url_for('home') }}" aria-label="Home">C</a>
+    <span>Not medical advice or for treatment decisions.</span>
+  </div>
+</footer>
 
 </body>
 </html>

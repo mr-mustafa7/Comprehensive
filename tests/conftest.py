@@ -14,6 +14,7 @@ def app(tmp_path, monkeypatch):
         TESTING=True,
         SECRET_KEY="test-only-secret",
         USAGE_INFERENCE_PROVIDER="rules",
+        DOCUMENT_SUMMARY_PROVIDER="rules",
     )
     yield flask_app
 

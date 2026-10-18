@@ -49,6 +49,7 @@ app.config.update(
     SECRET_KEY=os.environ.get("COMPREHENSIVE_SECRET_KEY") or secrets.token_hex(32),
     MAX_CONTENT_LENGTH=MAX_UPLOAD_BYTES,
     USAGE_INFERENCE_PROVIDER=os.environ.get("COMPREHENSIVE_USAGE_MODEL", "rules").lower(),
+    DOCUMENT_SUMMARY_PROVIDER=os.environ.get("COMPREHENSIVE_DOCUMENT_SUMMARY_MODEL", "claude").lower(),
 )
 init_security(app)
 app.register_blueprint(clinical.bp)
@@ -79,7 +80,7 @@ def queue_count():
 @app.route("/")
 def home():
     if g.user is None:
-        return redirect(url_for("clinical.login"))
+        return render_template("login.html")
     if g.user["role"] == "clinician":
         return redirect(url_for("clinical.clinician_dashboard"))
     return redirect(url_for("clinical.patient_dashboard"))

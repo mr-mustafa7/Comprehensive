@@ -17,7 +17,7 @@ from src.claude_cli import call_claude
 
 VALID_STATES = {"no_discrepancy_detected", "review_required", "analysis_incomplete"}
 REVIEW_MESSAGE = (
-    "Your report may differ from the instructions recorded by your clinician. "
+    "Your report may differ from the documentation recorded by your clinician. "
     "Do not change what you take based on this screen. Check the approved wording "
     "below and contact your clinician or pharmacist for advice. If you feel unwell "
     "or think you may need urgent help, use your usual urgent-care service."
@@ -29,7 +29,7 @@ INCOMPLETE_MESSAGE = (
 )
 CLEAR_MESSAGE = (
     "No difference was detected between the details you reported and the recorded "
-    "instructions. This is not a medical safety decision. Contact your clinician or "
+    "documentation. This is not a medical safety decision. Contact your clinician or "
     "pharmacist if anything is unclear or if your circumstances have changed."
 )
 

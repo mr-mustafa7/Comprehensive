@@ -33,7 +33,25 @@ def test_patient_cannot_guess_other_patients_assignment_or_report(client, login)
     sam_report = clinical_store.list_reports_for_patient(sam["id"])[0]
     login(client, alex["email"], "DemoPatient!2026")
     assert client.get(f"/patient/assignments/{sam_assignment['id']}").status_code == 404
+    assert client.get(f"/patient/assignments/{sam_assignment['id']}/download").status_code == 404
     assert client.get(f"/patient/reports/{sam_report['id']}").status_code == 404
+
+
+def test_patient_can_read_summary_and_download_exact_approved_document(client, login):
+    alex = clinical_store.get_user_by_email("alex.patient@demo.test")
+    assignment = clinical_store.list_assignments(alex["id"], True)[0]
+    login(client, alex["email"], "DemoPatient!2026")
+
+    page = client.get(f"/patient/assignments/{assignment['id']}")
+    assert page.status_code == 200
+    assert b"What this document says" in page.data
+    assert b"Document record" not in page.data
+
+    download = client.get(f"/patient/assignments/{assignment['id']}/download")
+    assert download.status_code == 200
+    assert download.data.decode() == assignment["instruction_text"]
+    assert "attachment" in download.headers["Content-Disposition"]
+    assert f"v{assignment['version_number']}.txt" in download.headers["Content-Disposition"]
 
 
 def test_clinician_cannot_access_unassigned_patient(client, login):

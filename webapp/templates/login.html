@@ -1,28 +1,113 @@
 {% extends "base.html" %}
-{% block title %}Sign in — Comprehensive{% endblock %}
+{% block title %}Comprehensive — Medication feedback{% endblock %}
+{% block body_class %}welcome-page{% endblock %}
 {% block content %}
-<div class="auth-layout">
-  <section class="auth-intro">
-    <span class="eyebrow">Clinician-supervised medication feedback</span>
-    <h1>Close the gap between instructions and actual use.</h1>
-    <p class="lede">Comprehensive helps fictional patients report what they actually did, then gives clinicians traceable comparisons and controlled instruction improvements.</p>
-    <div class="safety-note"><strong>Hackathon prototype.</strong> Synthetic data only. Not a medical device and not for treatment decisions.</div>
-  </section>
-  <section class="panel auth-card">
-    <span class="eyebrow">Secure access</span>
-    <h2>Sign in</h2>
-    <form method="post" class="stack-form">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-      <input type="hidden" name="next" value="{{ next or '' }}">
-      <label>Email address<input type="email" name="email" autocomplete="username" required autofocus></label>
-      <label>Password<input type="password" name="password" autocomplete="current-password" required></label>
-      <button class="btn" type="submit">Sign in</button>
-    </form>
-    <div class="demo-credentials">
-      <strong>Fictional demo accounts</strong>
-      <code>clinician@demo.test</code><span>DemoClinician!2026</span>
-      <code>alex.patient@demo.test</code><span>DemoPatient!2026</span>
-    </div>
-  </section>
-</div>
+<header class="workspace-hero welcome-hero">
+  <span class="eyebrow">Clinician-supervised medication feedback</span>
+  <h1>Close the gap between documentation<br class="desktop-break"> <span class="accent-text">and actual use.</span></h1>
+  <p class="lede">Help patients share what happened. Give clinicians the evidence<br class="desktop-break"> to review it and make documentation clearer.</p>
+  <ul class="hero-principles" aria-label="How Comprehensive works"><li>Patient-reported use</li><li>Traceable evidence</li><li>Clinician approval</li></ul>
+</header>
+
+<section class="product-showcase" id="how-it-works" aria-labelledby="showcase-title">
+  <h2 class="visually-hidden" id="showcase-title">Explore the Comprehensive workflow</h2>
+  <div class="showcase-tabs" role="tablist" aria-label="Explore Comprehensive">
+    <button class="showcase-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="showcase-report" id="tab-report" data-showcase-tab="report">
+      <strong>Report</strong>
+      <span>Patients record what they actually took, including uncertainty.</span>
+    </button>
+    <button class="showcase-tab" type="button" role="tab" aria-selected="false" aria-controls="showcase-review" id="tab-review" data-showcase-tab="review" tabindex="-1">
+      <strong>Review</strong>
+      <span>Clinicians compare reported use with the approved documentation.</span>
+    </button>
+    <button class="showcase-tab" type="button" role="tab" aria-selected="false" aria-controls="showcase-improve" id="tab-improve" data-showcase-tab="improve" tabindex="-1">
+      <strong>Improve</strong>
+      <span>Evidence becomes a clear, traceable documentation update.</span>
+    </button>
+  </div>
+
+  <div class="showcase-stage">
+    <article class="showcase-panel" id="showcase-report" role="tabpanel" aria-labelledby="tab-report" data-showcase-panel="report">
+      <div class="preview-browser">
+        <div class="preview-browser-bar"><i></i><i></i><i></i><span>app.comprehensive.health/report</span></div>
+        <div class="preview-app">
+          <div class="preview-app-nav"><b><i>C</i> Comprehensive</b><span>My medicines&nbsp;&nbsp;&nbsp; Report use</span></div>
+          <div class="preview-content preview-report">
+            <div><span class="preview-kicker">Patient report</span><h3>What did you actually take?</h3><p>Share what happened. It is okay if you do not remember every detail.</p></div>
+            <div class="preview-form-card">
+              <label>Medication <span>Medicine A</span></label>
+              <div class="preview-form-grid"><label>Number of doses <span>2</span></label><label>Quantity each time <span>1 tablet</span></label></div>
+              <label>When did you take it? <span>Morning, after breakfast</span></label>
+              <button type="button" tabindex="-1">Submit report <b>→</b></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="showcase-panel" id="showcase-review" role="tabpanel" aria-labelledby="tab-review" data-showcase-panel="review" hidden>
+      <div class="preview-browser">
+        <div class="preview-browser-bar"><i></i><i></i><i></i><span>app.comprehensive.health/review</span></div>
+        <div class="preview-app">
+          <div class="preview-app-nav"><b><i>C</i> Comprehensive</b><span>Dashboard&nbsp;&nbsp;&nbsp; Documentation&nbsp;&nbsp;&nbsp; Testing</span></div>
+          <div class="preview-content preview-review">
+            <div><span class="preview-kicker">Clinical review</span><h3>Compare the details</h3><p>Reported use and approved documentation remain side by side.</p></div>
+            <div class="preview-comparison">
+              <section><small>Patient reported</small><strong>2 doses</strong><p>1 tablet each, after breakfast</p></section>
+              <section><small>Recorded regimen</small><strong>1 dose</strong><p>1 tablet, in the morning</p></section>
+            </div>
+            <div class="preview-status"><i></i><span><strong>Review required</strong> A difference was detected in frequency.</span><button type="button" tabindex="-1">Review evidence</button></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="showcase-panel" id="showcase-improve" role="tabpanel" aria-labelledby="tab-improve" data-showcase-panel="improve" hidden>
+      <div class="preview-browser">
+        <div class="preview-browser-bar"><i></i><i></i><i></i><span>app.comprehensive.health/documentation</span></div>
+        <div class="preview-app">
+          <div class="preview-app-nav"><b><i>C</i> Comprehensive</b><span>Dashboard&nbsp;&nbsp;&nbsp; Documentation&nbsp;&nbsp;&nbsp; Testing</span></div>
+          <div class="preview-content preview-improve">
+            <div><span class="preview-kicker">Documentation update</span><h3>Make the instruction clearer</h3><p>Review the evidence, then approve a traceable new version.</p></div>
+            <div class="preview-wording">
+              <small>Suggested wording</small>
+              <blockquote>Take 1 tablet once each morning, after breakfast, with a glass of water.</blockquote>
+              <div><span>Source evidence linked</span><button type="button" tabindex="-1">Approve version 4</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<script>
+(() => {
+  const tabs = [...document.querySelectorAll("[data-showcase-tab]")];
+  const panels = [...document.querySelectorAll("[data-showcase-panel]")];
+
+  function showPanel(name, focus = false) {
+    tabs.forEach((tab) => {
+      const active = tab.dataset.showcaseTab === name;
+      tab.classList.toggle("is-active", active);
+      tab.setAttribute("aria-selected", String(active));
+      tab.tabIndex = active ? 0 : -1;
+      if (active && focus) tab.focus();
+    });
+    panels.forEach((panel) => { panel.hidden = panel.dataset.showcasePanel !== name; });
+  }
+
+  tabs.forEach((tab, index) => {
+    tab.addEventListener("click", () => showPanel(tab.dataset.showcaseTab));
+    tab.addEventListener("keydown", (event) => {
+      if (!["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight"].includes(event.key)) return;
+      event.preventDefault();
+      const direction = ["ArrowDown", "ArrowRight"].includes(event.key) ? 1 : -1;
+      const next = tabs[(index + direction + tabs.length) % tabs.length];
+      showPanel(next.dataset.showcaseTab, true);
+    });
+  });
+})();
+</script>
 {% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}{{ assignment.medication_name }} instructions — Comprehensive{% endblock %}
+{% block content %}
+<a class="back-link" href="{{ url_for('clinical.patient_dashboard') }}">← My medicines</a>
+<div class="page-heading"><span class="eyebrow">Approved for you · version {{ assignment.version_number }}</span><h1>{{ assignment.medication_name }}</h1><p class="lede">This is the exact wording and regimen currently assigned by your clinician.</p></div>
+<div class="two-col wide-left">
+<section class="panel instruction-panel"><span class="eyebrow">Approved instruction</span><div class="instruction-quote large">{{ assignment.instruction_text }}</div><dl class="detail-list"><dt>Quantity each time</dt><dd>{{ assignment.dose_quantity|int if assignment.dose_quantity % 1 == 0 else assignment.dose_quantity }} {{ assignment.dose_unit }}</dd><dt>Frequency</dt><dd>{{ assignment.frequency_per_day }} time(s) per day</dd><dt>Timing</dt><dd>{{ assignment.timing_instructions }}</dd><dt>Conditions or exceptions</dt><dd>{{ assignment.conditions or 'None recorded' }}</dd><dt>Effective from</dt><dd>{{ assignment.effective_from }}</dd></dl><a class="btn" href="{{ url_for('clinical.patient_report', assignment_id=assignment.id) }}">Report what I actually took</a></section>
+<aside class="panel"><span class="eyebrow">Document record</span><h2>{{ assignment.document_title }}</h2><p class="note">{{ assignment.source }}</p><p class="note">{{ assignment.provenance }}</p><div class="safety-note"><strong>Questions?</strong> Contact your clinician or pharmacist. Do not use this prototype to decide a future dose.</div></aside>
+</div>
+{% endblock %}

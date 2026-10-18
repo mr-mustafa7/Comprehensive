@@ -1,0 +1,100 @@
+{
+  "disclosure": "Synthetic held-out medication-use examples; not clinical validation.",
+  "n": 8,
+  "baseline": {
+    "true_positives": 3,
+    "true_negatives": 2,
+    "false_alarms": 0,
+    "missed_discrepancies": 3,
+    "sensitivity": 0.5,
+    "false_alarm_rate": 0.0
+  },
+  "hybrid_assessment": {
+    "true_positives": 6,
+    "true_negatives": 2,
+    "false_alarms": 0,
+    "missed_discrepancies": 0,
+    "sensitivity": 1.0,
+    "false_alarm_rate": 0.0
+  },
+  "examples": [
+    {
+      "id": "heldout_exact_match",
+      "expected_discrepancy": false,
+      "baseline_flagged": false,
+      "hybrid_flagged": false,
+      "hybrid_status": "no_discrepancy_detected",
+      "hybrid_types": []
+    },
+    {
+      "id": "heldout_extra_dose",
+      "expected_discrepancy": true,
+      "baseline_flagged": true,
+      "hybrid_flagged": true,
+      "hybrid_status": "review_required",
+      "hybrid_types": [
+        "frequency_mismatch"
+      ]
+    },
+    {
+      "id": "heldout_quantity_difference",
+      "expected_discrepancy": true,
+      "baseline_flagged": true,
+      "hybrid_flagged": true,
+      "hybrid_status": "review_required",
+      "hybrid_types": [
+        "quantity_mismatch"
+      ]
+    },
+    {
+      "id": "heldout_both_structured_differences",
+      "expected_discrepancy": true,
+      "baseline_flagged": true,
+      "hybrid_flagged": true,
+      "hybrid_status": "review_required",
+      "hybrid_types": [
+        "frequency_mismatch",
+        "quantity_mismatch"
+      ]
+    },
+    {
+      "id": "heldout_uncertain_memory",
+      "expected_discrepancy": true,
+      "baseline_flagged": false,
+      "hybrid_flagged": true,
+      "hybrid_status": "analysis_incomplete",
+      "hybrid_types": [
+        "ambiguous_report"
+      ]
+    },
+    {
+      "id": "heldout_text_contradicts_form",
+      "expected_discrepancy": true,
+      "baseline_flagged": false,
+      "hybrid_flagged": true,
+      "hybrid_status": "review_required",
+      "hybrid_types": [
+        "structured_text_contradiction"
+      ]
+    },
+    {
+      "id": "heldout_missing_without_guess",
+      "expected_discrepancy": true,
+      "baseline_flagged": false,
+      "hybrid_flagged": true,
+      "hybrid_status": "analysis_incomplete",
+      "hybrid_types": [
+        "missing_information",
+        "ambiguous_report"
+      ]
+    },
+    {
+      "id": "heldout_match_with_extra_context",
+      "expected_discrepancy": false,
+      "baseline_flagged": false,
+      "hybrid_flagged": false,
+      "hybrid_status": "no_discrepancy_detected",
+      "hybrid_types": []
+    }
+  ]
+}

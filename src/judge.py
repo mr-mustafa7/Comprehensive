@@ -71,14 +71,24 @@ def judge_paraphrase(document_text: str, paraphrase_text: str) -> dict:
 
     try:
         result = _parse_json_response(raw_text)
-    except json.JSONDecodeError:
+        required = {"flagged", "risk_type", "severity", "confidence", "source_phrase", "explanation"}
+        if not isinstance(result, dict) or not required.issubset(result):
+            raise ValueError("judge response is missing required fields")
+        if not isinstance(result["flagged"], bool):
+            raise ValueError("judge 'flagged' field is not boolean")
+    except (json.JSONDecodeError, TypeError, ValueError) as exc:
+        # Fail closed. A malformed model response is an unresolved review item,
+        # never evidence that the document was understood.
         result = {
-            "flagged": False,
-            "risk_type": "none",
+            "flagged": True,
+            "risk_type": "analysis_incomplete",
             "severity": 0,
             "confidence": 0.0,
             "source_phrase": "",
-            "explanation": f"JUDGE_PARSE_ERROR: could not parse model output: {raw_text[:200]!r}",
+            "explanation": f"JUDGE_PARSE_ERROR: {exc}; output: {raw_text[:200]!r}",
+            "analysis_complete": False,
         }
+    else:
+        result["analysis_complete"] = True
     result["_usage"] = usage
     return result

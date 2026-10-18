@@ -1,6 +1,165 @@
-# Comprehension-gap checker for AI-generated patient instructions
+# Comprehensive 2.0
 
 SotonShip 2026 · Responsible AI track · Barclays Eagle Labs Southampton
+
+Comprehensive 2.0 is a clinician-supervised medication communication prototype.
+Fictional patients report what they **actually took**; the application compares that
+report with the exact approved patient-specific regimen and instruction version,
+shows possible differences with evidence, and keeps a clinician in control of every
+assessment and wording change.
+
+> **Hackathon MVP only.** This repository uses fictional patients, a fictional
+> “Medicine A”, and synthetic reports. It is not clinically validated, NHS-approved,
+> GDPR-compliant, or suitable for treatment decisions. It must not be used with real
+> patient data.
+
+## Quick start and demo accounts
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+export COMPREHENSIVE_SECRET_KEY="$(python3 -c 'import secrets; print(secrets.token_hex(32))')"
+.venv/bin/python -m webapp.app
+```
+
+Open <http://localhost:5050>. The first launch creates idempotent synthetic demo data
+in `outputs/review.db` without changing the historical CSV evaluation outputs.
+
+| Role | Email | Password |
+|---|---|---|
+| Fictional clinician | `clinician@demo.test` | `DemoClinician!2026` |
+| Fictional patient Alex | `alex.patient@demo.test` | `DemoPatient!2026` |
+| Fictional patient Sam | `sam.patient@demo.test` | `DemoPatient!2026` |
+
+A seeded, single-use test activation URL is available at
+`/activate/demo-activate-fictional-patient-2026` for
+`invited.patient@demo.test` for 30 days after a clean seed. Normal invitations use
+`secrets.token_urlsafe(32)`; only SHA-256 token hashes are stored.
+
+Run the reproducible checks:
+
+```bash
+.venv/bin/python -m pytest -q
+.venv/bin/python -m src.usage_eval --write
+```
+
+The Claude-backed free-text adapter is optional in the reproducible offline demo.
+Enable it only for synthetic data after authenticating the existing Claude Code CLI:
+
+```bash
+export COMPREHENSIVE_USAGE_MODEL=claude
+npx -y @anthropic-ai/claude-code   # complete /login once
+.venv/bin/python -m webapp.app
+```
+
+Without that environment setting, explicit quantity/frequency checks, uncertainty,
+missing fields, and common structured/free-text contradictions run locally and
+deterministically. With it enabled, `src/usage_assessment.py` sends only the
+synthetic report and approved regimen to the existing `src/claude_cli.py` adapter
+(`claude-cli:sonnet`). Model identifier, latency, CLI-reported cost, and errors are
+stored. A transport or parse failure produces `analysis_incomplete`, never a clean
+result.
+
+## Demo journey
+
+1. Sign in as `clinician@demo.test` and open **Alex Morgan**.
+2. Inspect the immutable Medicine A regimen, instruction version, and seeded report
+   history. The document library also shows the clinician-approved version 2.
+3. Sign out and sign in as `alex.patient@demo.test`.
+4. Choose **Report what I took**, enter two doses of one tablet (morning and night),
+   and describe what actually happened.
+5. Open the resulting patient feedback. It shows the report beside the approved
+   wording, labels the possible frequency difference, and gives non-prescriptive
+   contact guidance.
+6. Return as the clinician. Open the flagged report, inspect its evidence, and
+   confirm, dismiss, or amend the assessment with a recorded reason.
+7. Open its wording suggestion. Edit and approve it to create a new immutable
+   supplementary-instruction version; the old version and report link remain intact.
+8. Open the document history and recent activity to see version, review, assignment,
+   and audit lineage.
+9. Use **Pre-release testing** to verify that the original simulated-reader panel,
+   OCR upload, review queue, edit/retest, governance, and historical evaluation UI
+   remain separate and available.
+
+## Users, buyer, architecture, and data flow
+
+The direct users are clinicians responsible for medication communication and
+patients completing supervised follow-up. A credible buyer is an NHS trust or its
+medication/discharge-software supplier purchasing a governed communication and
+assurance workflow—not an autonomous prescribing tool.
+
+The implementation deliberately retains Flask and SQLite:
+
+```text
+Patient report
+  → immutable assignment (regimen + approved document version)
+  → deterministic structured comparison
+  → optional Claude free-text adapter
+  → validated assessment (clean / review required / incomplete)
+  → clinician decision + labelled feedback
+  → optional wording suggestion
+  → clinician-edited approval creates a new version and assignment
+```
+
+- `webapp/app.py` retains the original Flask routes and registers the new workflow.
+- `webapp/clinical_store.py` adds normalised, foreign-keyed domain tables to the
+  existing SQLite database. Queries are kept out of templates/routes so a later
+  PostgreSQL repository adapter is straightforward.
+- `webapp/security.py` provides server-side sessions, role decorators, CSRF checks,
+  secure Werkzeug password hashes, and session-cookie settings.
+- `src/usage_assessment.py` separates deterministic checks from the swappable
+  inference adapter. It never invents or changes an instruction.
+- `src/document_feedback.py` creates a clinician-review-only supplementary wording
+  hypothesis. It never claims the document caused a patient's behaviour.
+
+Every report points to the assignment, regimen, and document-version IDs active at
+submission. New wording creates a new version and assignment instead of mutating
+history. Assessment reviews provide Loop B labelled feedback; approved instruction
+versions provide Loop A workflow improvement. Nothing retrains or fine-tunes model
+weights automatically.
+
+## Security, privacy, and limitations
+
+The MVP enforces clinician/patient roles, relationship-scoped clinician access,
+patient ownership checks, CSRF on every state-changing request, random expiring
+single-use invitations, token hashing, password hashing, input validation, and an
+append-only audit trail. The application intentionally returns 404 for guessed
+patient records outside the authorised relationship.
+
+These controls are appropriate for a hackathon demonstration, not production health
+data. Real deployment would additionally require threat modelling and penetration
+testing, managed secret rotation, TLS and secure-cookie enforcement, robust rate
+limiting/MFA/SSO, encrypted backups, retention and deletion policies, data-protection
+impact assessment, supplier and model-provider agreements, monitoring, incident
+response, accessibility research, clinical safety cases, qualified clinical
+validation, and regulatory assessment. No real patient information should be sent
+to Claude or stored in this prototype.
+
+## New usage-workflow evaluation
+
+Development examples and held-out examples are separated under
+`data/usage_assessment/`. `python -m src.usage_eval --write` evaluates the held-out
+set and writes `outputs/usage_eval_results.json`; it does not touch or relabel the
+original document-comprehension measurements.
+
+On the current **8 hand-authored synthetic held-out examples** (6 expected review,
+2 expected no-review), the rules-only quantity/frequency baseline recorded 3 true
+positives, 3 missed discrepancies, 0 false alarms, and 2 true negatives. The hybrid
+structured + text-safety comparator recorded 6 true positives, 0 misses, 0 false
+alarms, and 2 true negatives. These exact numbers are reproducible and visible at
+`/clinician/usage-evaluation`; the sample is far too small and artificial to support
+any clinical or generalisation claim.
+
+## Existing pre-release document-testing capability
+
+The original application remains available as a distinct clinician-only feature.
+Its historical datasets and result CSVs are unchanged. The remainder of this README
+documents that original simulated-reader comprehension-gap checker and its previously
+collected measurements. The original pipeline was built with Claude Code assistance,
+as disclosed in its historical AI-disclosure section below. The Comprehensive 2.0
+extension in this repository was implemented with OpenAI Codex as a software
+engineering assistant; its generated changes were exercised by the automated suite
+and browser smoke tests, but that does not constitute independent clinical review.
 
 > We help an NHS AI-vendor building discharge-documentation tools (and the trust
 > discharge-documentation leads who use them) catch likely misunderstandings in

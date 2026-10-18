@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Activate account — Comprehensive{% endblock %}
+{% block content %}
+<div class="auth-layout compact-auth">
+  <section class="auth-intro">
+    <span class="eyebrow">Patient invitation</span>
+    <h1>Activate your account</h1>
+    <p class="lede">Set your own password to view fictional medication instructions and report what you actually took.</p>
+  </section>
+  <section class="panel auth-card">
+    {% if not invitation or invitation.accepted_at %}
+      <h2>This invitation is not available</h2>
+      <p class="note">It may be invalid, expired, or already used. Ask the inviting clinician for a new link.</p>
+    {% else %}
+      <h2>{{ invitation.patient_email }}</h2>
+      <form method="post" class="stack-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label>Your name<input name="display_name" required autocomplete="name"></label>
+        <label>Create password<input type="password" name="password" required autocomplete="new-password"></label>
+        <p class="field-help">At least 12 characters, with upper-case, lower-case, and a number.</p>
+        <label>Confirm password<input type="password" name="password_confirm" required autocomplete="new-password"></label>
+        <button class="btn">Activate account</button>
+      </form>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

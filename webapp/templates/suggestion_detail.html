@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Instruction suggestion — Comprehensive{% endblock %}
+{% block content %}
+<a class="back-link" href="{{ url_for('clinical.document_detail', document_id=suggestion.document_id) }}">← {{ suggestion.document_title }}</a>
+<div class="page-heading split-heading"><div><span class="eyebrow">Clinician-review-only draft</span><h1>Instruction improvement</h1><p class="lede">The original remains authoritative until a clinician approves a new supplementary version.</p></div><span class="assessment-chip {{ 'review_required' if suggestion.status == 'pending' else ('no_discrepancy_detected' if suggestion.status == 'approved' else 'neutral') }}">{{ suggestion.status }}</span></div>
+<div class="comparison-grid">
+  <section class="panel comparison-card"><span class="eyebrow">Original · v{{ suggestion.source_version }}</span><blockquote>{{ suggestion.original_text }}</blockquote></section>
+  <section class="panel comparison-card"><span class="eyebrow">Proposed wording</span><blockquote>{{ suggestion.proposed_wording }}</blockquote><p class="note">{{ suggestion.rationale }}</p></section>
+</div>
+<section class="panel"><div class="panel-heading"><div><span class="eyebrow">Contributing evidence</span><h2>Reported discrepancies</h2></div></div>
+  <div class="finding-list">{% for assessment in suggestion.assessments %}<article class="finding"><span class="finding-type">Report #{{ assessment.report_id }} · {{ assessment.patient_name }}</span>{% for finding in assessment.findings %}<p><strong>{{ finding.type.replace('_', ' ') }}:</strong> {{ finding.evidence }}</p>{% endfor %}</article>{% endfor %}</div>
+</section>
+{% if suggestion.status == 'pending' %}<section class="panel"><div class="panel-heading"><div><span class="eyebrow">Human approval</span><h2>Edit, approve, or reject</h2></div></div>
+  <form method="post" action="{{ url_for('clinical.review_suggestion', suggestion_id=suggestion.id) }}" class="stack-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Proposed supplementary wording<textarea name="wording" rows="5" required>{{ suggestion.proposed_wording }}</textarea></label>
+    <label>Decision reason<textarea name="reason" rows="3" required></textarea></label>
+    <div class="safety-note"><strong>Approval creates a new version.</strong> It does not overwrite the source version or change the approved regimen.</div>
+    <div class="form-actions"><button class="btn" name="action" value="approve">Approve as new version</button><button class="btn ghost" name="action" value="reject">Reject suggestion</button></div>
+  </form>
+</section>{% else %}<section class="panel"><div class="decision-banner"><strong>{{ suggestion.status|title }}</strong><span>{{ suggestion.review_reason }}{% if suggestion.created_version_id %} · created document version record #{{ suggestion.created_version_id }}{% endif %}</span></div></section>{% endif %}
+{% endblock %}

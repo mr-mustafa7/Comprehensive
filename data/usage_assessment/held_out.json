@@ -1,0 +1,42 @@
+[
+  {
+    "id": "heldout_exact_match",
+    "expected_discrepancy": false,
+    "report": {"number_of_doses": 1, "quantity_per_dose": 1, "timing_information": "around 8am", "explanation": "I took one tablet with breakfast.", "uncertain": false}
+  },
+  {
+    "id": "heldout_extra_dose",
+    "expected_discrepancy": true,
+    "report": {"number_of_doses": 2, "quantity_per_dose": 1, "timing_information": "8am and 8pm", "explanation": "I took it twice.", "uncertain": false}
+  },
+  {
+    "id": "heldout_quantity_difference",
+    "expected_discrepancy": true,
+    "report": {"number_of_doses": 1, "quantity_per_dose": 1.5, "timing_information": "morning", "explanation": "I took one and a half tablets once.", "uncertain": false}
+  },
+  {
+    "id": "heldout_both_structured_differences",
+    "expected_discrepancy": true,
+    "report": {"number_of_doses": 3, "quantity_per_dose": 2, "timing_information": "three occasions", "explanation": "I took two tablets three times.", "uncertain": false}
+  },
+  {
+    "id": "heldout_uncertain_memory",
+    "expected_discrepancy": true,
+    "report": {"number_of_doses": 1, "quantity_per_dose": 1, "timing_information": "", "explanation": "I might have taken it once but I am not sure.", "uncertain": true}
+  },
+  {
+    "id": "heldout_text_contradicts_form",
+    "expected_discrepancy": true,
+    "report": {"number_of_doses": 1, "quantity_per_dose": 1, "timing_information": "morning and evening", "explanation": "I took it twice, once in the morning and once at night.", "uncertain": false}
+  },
+  {
+    "id": "heldout_missing_without_guess",
+    "expected_discrepancy": true,
+    "report": {"number_of_doses": null, "quantity_per_dose": null, "timing_information": "", "explanation": "I do not know the details.", "uncertain": true}
+  },
+  {
+    "id": "heldout_match_with_extra_context",
+    "expected_discrepancy": false,
+    "report": {"number_of_doses": 1, "quantity_per_dose": 1, "timing_information": "morning", "explanation": "I took one tablet once this morning and wrote it in my fictional diary.", "uncertain": false}
+  }
+]

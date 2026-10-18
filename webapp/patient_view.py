@@ -43,12 +43,20 @@ def resolve(run: dict) -> dict:
         children = store.get_children(run["id"])
         if children:
             final = children[-1]
+            complete = not final["result"].get("flagged") and not final["result"].get("n_errors")
+            if complete and final["status"] == store.NOT_FLAGGED:
+                return {
+                    "state": "ready",
+                    "text": final["document_text"],
+                    "flagged_phrases": flagged_phrases(run),
+                    "reviewer_note": "Reviewer rewrote the flagged wording; shown below is their corrected version, retested by the same readers.",
+                    "retest_flagged": False,
+                }
             return {
-                "state": "ready",
-                "text": final["document_text"],
+                "state": "not_ready",
+                "text": None,
                 "flagged_phrases": flagged_phrases(run),
-                "reviewer_note": "Reviewer rewrote the flagged wording; shown below is their corrected version, retested by the same readers.",
-                "retest_flagged": bool(final["result"]["flagged"]),
+                "retest_flagged": True,
             }
 
     return {"state": "not_ready", "text": None, "flagged_phrases": flagged_phrases(run)}

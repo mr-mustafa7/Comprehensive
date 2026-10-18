@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Report {{ report.id }} — Comprehensive{% endblock %}
+{% block content %}
+<a class="back-link" href="{{ url_for('clinical.clinician_patient', patient_id=patient.id) }}">← {{ patient.display_name }}</a>
+<div class="page-heading split-heading"><div><span class="eyebrow">Actual-use report #{{ report.id }}</span><h1>{{ report.medication_name }}</h1><p class="lede">{{ patient.display_name }} · reported {{ report.reported_usage_date }} · compared with regimen and instruction v{{ report.version_number }}</p></div><span class="assessment-chip large {{ report.assessment_status }}">{{ report.assessment_status.replace('_', ' ') }}</span></div>
+
+<div class="comparison-grid">
+  <section class="panel comparison-card reported"><span class="eyebrow">Patient reported</span><h2>{{ report.number_of_doses if report.number_of_doses is not none else 'Unknown' }} dose(s) · {{ report.quantity_per_dose if report.quantity_per_dose is not none else 'Unknown' }} {{ report.dose_unit }} each</h2><p>{{ report.timing_information or 'Timing not provided' }}</p><blockquote>{{ report.explanation or 'No written explanation provided.' }}</blockquote>{% if report.uncertain %}<span class="assessment-chip analysis_incomplete">Memory marked uncertain</span>{% endif %}</section>
+  <section class="panel comparison-card approved"><span class="eyebrow">Clinician approved</span><h2>{{ report.frequency_per_day }} dose(s) per day · {{ report.dose_quantity|int if report.dose_quantity % 1 == 0 else report.dose_quantity }} {{ report.dose_unit }} each</h2><p>{{ report.timing_instructions }}</p><blockquote>{{ report.instruction_text }}</blockquote><small>{{ report.document_title }} · immutable v{{ report.version_number }}</small></section>
+</div>
+
+{% if report.assessment %}<section class="panel">
+  <div class="panel-heading"><div><span class="eyebrow">Structured assessment</span><h2>Evidence for clinician review</h2></div><span class="model-meta">{{ report.model_name }} · {{ report.latency_ms }}ms · ${{ '%.4f'|format(report.cost_usd) }}</span></div>
+  {% if report.model_error %}<div class="safety-note"><strong>Analysis incomplete:</strong> {{ report.model_error }}</div>{% endif %}
+  {% if report.assessment.findings %}<div class="finding-list">{% for finding in report.assessment.findings %}<article class="finding"><span class="finding-type">{{ finding.type.replace('_', ' ') }}</span><p>{{ finding.evidence }}</p><dl><dt>Reported</dt><dd>{{ finding.reported_value }}</dd><dt>Approved</dt><dd>{{ finding.approved_value }}</dd></dl></article>{% endfor %}</div>{% else %}<div class="empty-state"><strong>No discrepancy detected</strong><span>This is not a medical safety conclusion.</span></div>{% endif %}
+</section>{% endif %}
+
+<div class="two-col">
+  <section class="panel"><div class="panel-heading"><h2 class="accent-heading">Review assessment accuracy</h2></div>
+    {% if report.review_decision %}<div class="decision-banner"><strong>{{ report.review_decision|title }}</strong><span>{{ report.review_reason }}</span></div>{% else %}
+    <form method="post" action="{{ url_for('clinical.review_assessment', assessment_id=report.assessment_id) }}" class="stack-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label>Reason<textarea name="reason" rows="3" required placeholder="Record why you agree, dismiss, or amend the finding."></textarea></label>
+      <label>Amended finding (only if amending)<input name="amended_findings"></label>
+      <div class="form-actions"><button class="btn" name="decision" value="confirmed">Confirm</button><button class="btn ghost" name="decision" value="dismissed">Dismiss</button><button class="btn ghost" name="decision" value="amended">Amend</button></div>
+    </form>{% endif %}
+  </section>
+  <section class="panel"><div class="panel-heading"><h2 class="accent-heading">Improve patient instructions</h2></div>
+    {% if suggestions %}<div class="list-stack">{% for suggestion in suggestions %}<a class="list-row plain" href="{{ url_for('clinical.suggestion_detail', suggestion_id=suggestion.id) }}"><span><strong>{{ suggestion.status|title }} suggestion</strong><small>Source document v{{ suggestion.source_version }}</small></span><span>Inspect →</span></a>{% endfor %}</div>{% else %}<div class="empty-state"><strong>No wording suggestion</strong><span>A report does not imply the document caused the behaviour.</span></div>{% endif %}
+  </section>
+</div>
+{% endblock %}

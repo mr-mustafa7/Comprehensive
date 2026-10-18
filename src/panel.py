@@ -129,8 +129,11 @@ def run_panel(document_text: str, on_reader_done=None) -> list[dict]:
 
 
 def panel_flagged(readers: list[dict]) -> bool:
-    """Pre-registered decision rule: flag if any reader's teach-back was flagged."""
-    return any(r.get("judge") and r["judge"].get("flagged") for r in readers)
+    """Flag a detected risk *or* an incomplete reader call.
+
+    A failed call cannot be counted as evidence that a document is clear.
+    """
+    return any(r.get("error") or not r.get("judge") or r["judge"].get("flagged") for r in readers)
 
 
 def main():

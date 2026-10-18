@@ -165,6 +165,7 @@
 
     {% if run.status == 'pending' %}
     <form method="post" action="{{ url_for('decide', run_id=run.id) }}" class="review-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <label>Reviewer name and role
         <input name="reviewer" required placeholder="e.g. A. Patel, medicines-information pharmacist">
       </label>
@@ -185,6 +186,7 @@
     <details class="edit-box" {{ 'open' if run.status == 'confirmed' }}>
       <summary>Edit the source and retest</summary>
       <form method="post" action="{{ url_for('retest', run_id=run.id) }}" class="review-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <p class="note">Rewrite the wording yourself, then re-run the same check
           ({{ 'all five readers' if run.mode == 'panel' else 'single reader' }}) on your version.
           The tool does not write fixes; it only tests yours.</p>

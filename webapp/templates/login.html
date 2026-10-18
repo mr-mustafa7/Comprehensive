@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Sign in — Comprehensive{% endblock %}
+{% block content %}
+<div class="auth-layout">
+  <section class="auth-intro">
+    <span class="eyebrow">Clinician-supervised medication feedback</span>
+    <h1>Close the gap between instructions and actual use.</h1>
+    <p class="lede">Comprehensive helps fictional patients report what they actually did, then gives clinicians traceable comparisons and controlled instruction improvements.</p>
+    <div class="safety-note"><strong>Hackathon prototype.</strong> Synthetic data only. Not a medical device and not for treatment decisions.</div>
+  </section>
+  <section class="panel auth-card">
+    <span class="eyebrow">Secure access</span>
+    <h2>Sign in</h2>
+    <form method="post" class="stack-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <input type="hidden" name="next" value="{{ next or '' }}">
+      <label>Email address<input type="email" name="email" autocomplete="username" required autofocus></label>
+      <label>Password<input type="password" name="password" autocomplete="current-password" required></label>
+      <button class="btn" type="submit">Sign in</button>
+    </form>
+    <div class="demo-credentials">
+      <strong>Fictional demo accounts</strong>
+      <code>clinician@demo.test</code><span>DemoClinician!2026</span>
+      <code>alex.patient@demo.test</code><span>DemoPatient!2026</span>
+    </div>
+  </section>
+</div>
+{% endblock %}

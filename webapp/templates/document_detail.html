@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}{{ document.title }} — Comprehensive{% endblock %}
+{% block content %}
+<a class="back-link" href="{{ url_for('clinical.documents') }}">← Instruction library</a>
+<div class="page-heading"><span class="eyebrow">Version-controlled instruction</span><h1>{{ document.title }}</h1><p class="lede">{{ document.source }} · {{ document.provenance }}</p></div>
+<div class="two-col wide-left">
+  <section>
+    {% for version in document.versions %}<article class="panel version-card">
+      <div class="panel-heading"><div><span class="eyebrow">Version {{ version.version_number }}</span><h2>{{ version.approval_status|title }}</h2></div><span class="assessment-chip {{ 'no_discrepancy_detected' if version.approval_status == 'approved' else 'neutral' }}">{{ version.approval_status }}</span></div>
+      <div class="instruction-quote">{{ version.text }}</div>
+      <p class="note">Approved by {{ version.approver_name or '—' }} · {{ version.approved_at[:16].replace('T', ' ') if version.approved_at else 'not approved' }}</p>
+    </article>{% endfor %}
+  </section>
+  <section class="panel">
+    <div class="panel-heading"><div><span class="eyebrow">Evidence</span><h2>Improvement decisions</h2></div></div>
+    {% if suggestions %}<div class="list-stack">{% for suggestion in suggestions %}<a class="list-row plain" href="{{ url_for('clinical.suggestion_detail', suggestion_id=suggestion.id) }}"><span><strong>Suggestion from v{{ suggestion.source_version }}</strong><small>{{ suggestion.status }} · {{ suggestion.assessment_count }} assessment(s)</small></span><span>Open →</span></a>{% endfor %}</div>{% else %}<div class="empty-state"><strong>No suggestions</strong><span>Original wording remains unchanged.</span></div>{% endif %}
+  </section>
+</div>
+{% endblock %}

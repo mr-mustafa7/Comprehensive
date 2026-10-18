@@ -61,6 +61,7 @@ def call_claude(system_prompt: str, user_prompt: str, model_alias: str) -> tuple
         "cost_usd": data.get("total_cost_usd", 0.0),
         "duration_ms": data.get("duration_ms", 0),
         "num_turns": data.get("num_turns", 1),
+        "model_usage": data.get("modelUsage", {}),
     }
     return text, usage
 
@@ -129,5 +130,6 @@ def call_claude_with_image(prompt: str, image_bytes: bytes, media_type: str,
         "cost_usd": final.get("total_cost_usd", 0.0),
         "duration_ms": final.get("duration_ms", 0),
         "num_turns": final.get("num_turns", 1),
+        "model_usage": final.get("modelUsage", {}),
     }
     return text, usage

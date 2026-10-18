@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Clinician dashboard — Comprehensive{% endblock %}
+{% block content %}
+<div class="page-heading split-heading">
+  <div><span class="eyebrow">Clinical workspace</span><h1>Good morning, {{ current_user.display_name }}</h1>
+  <p class="lede">Review actual-use reports, keep every comparison tied to approved wording, and make changes only through visible clinician approval.</p></div>
+  <a class="btn" href="{{ url_for('clinical.documents') }}">Manage instructions</a>
+</div>
+
+<div class="metric-grid">
+  <div class="metric-card"><span class="metric-value">{{ patients|length }}</span><span class="metric-label">Assigned patients</span></div>
+  <div class="metric-card attention"><span class="metric-value">{{ pending|length }}</span><span class="metric-label">Reports requiring review</span></div>
+  <div class="metric-card"><span class="metric-value">{{ suggestions|length }}</span><span class="metric-label">Wording suggestions</span></div>
+  <div class="metric-card"><span class="metric-value">{{ clarifications }}</span><span class="metric-label">Clarification requests</span></div>
+</div>
+
+<div class="dashboard-grid">
+  <section class="panel span-2">
+    <div class="panel-heading"><div><span class="eyebrow">Review queue</span><h2>Recent medication-use reports</h2></div><span class="count-badge">{{ reports|length }}</span></div>
+    {% if reports %}
+    <div class="table-scroll"><table class="data-table"><thead><tr><th>Patient</th><th>Medication</th><th>Reported</th><th>Assessment</th><th></th></tr></thead><tbody>
+      {% for report in reports %}<tr>
+        <td><a href="{{ url_for('clinical.clinician_patient', patient_id=report.patient_id) }}">{% for patient in patients %}{% if patient.id == report.patient_id %}{{ patient.display_name }}{% endif %}{% endfor %}</a></td>
+        <td>{{ report.medication_name }} <span class="muted">v{{ report.version_number }}</span></td>
+        <td>{{ report.reported_usage_date }}</td>
+        <td><span class="assessment-chip {{ report.assessment_status }}">{{ (report.assessment_status or 'pending').replace('_', ' ') }}</span>{% if report.review_decision %}<span class="reviewed-mark">Reviewed</span>{% endif %}</td>
+        <td><a class="text-link" href="{{ url_for('clinical.clinician_report', report_id=report.id) }}">Inspect →</a></td>
+      </tr>{% endfor %}
+    </tbody></table></div>
+    {% else %}<div class="empty-state"><strong>No reports yet</strong><span>Patient reports will appear here.</span></div>{% endif %}
+  </section>
+
+  <section class="panel">
+    <div class="panel-heading"><div><span class="eyebrow">People</span><h2>Assigned patients</h2></div></div>
+    <div class="list-stack">
+      {% for patient in patients %}<a class="list-row" href="{{ url_for('clinical.clinician_patient', patient_id=patient.id) }}"><span class="avatar">{{ patient.display_name[:1] }}</span><span><strong>{{ patient.display_name }}</strong><small>{{ patient.assignment_count }} active instruction set · {{ patient.review_count }} flagged/incomplete</small></span><span aria-hidden="true">→</span></a>{% endfor %}
+    </div>
+    <details class="inline-details"><summary>Invite a fictional patient</summary>
+      <form method="post" action="{{ url_for('clinical.invite_patient') }}" class="stack-form compact-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label>Email address<input type="email" name="email" required placeholder="fictional.patient@example.test"></label>
+        <button class="btn">Create single-use invite</button>
+      </form>
+    </details>
+  </section>
+
+  <section class="panel">
+    <div class="panel-heading"><div><span class="eyebrow">Human-controlled loop</span><h2>Instruction improvements</h2></div></div>
+    {% if suggestions %}<div class="list-stack">
+      {% for suggestion in suggestions %}<a class="list-row plain" href="{{ url_for('clinical.suggestion_detail', suggestion_id=suggestion.id) }}"><span><strong>{{ suggestion.document_title }}</strong><small>{{ suggestion.assessment_count }} assessment(s) contributed · source v{{ suggestion.source_version }}</small></span><span>Review →</span></a>{% endfor %}
+    </div>{% else %}<div class="empty-state"><strong>No suggestions waiting</strong><span>Nothing changes without clinician approval.</span></div>{% endif %}
+  </section>
+
+  <section class="panel span-2">
+    <div class="panel-heading"><div><span class="eyebrow">Traceability</span><h2>Recent activity</h2></div></div>
+    <ol class="activity-feed">{% for event in activity %}<li><span class="activity-dot"></span><div><strong>{{ event.action.replace('.', ' ') }}</strong><small>{{ event.actor_name or 'Assessment service' }} · {{ event.created_at[:16].replace('T', ' ') }}</small></div></li>{% endfor %}</ol>
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Report medication use — Comprehensive{% endblock %}
+{% block content %}
+<a class="back-link" href="{{ url_for('clinical.patient_dashboard') }}">← My medicines</a>
+<div class="page-heading"><span class="eyebrow">Actual-use report</span><h1>What did you actually take?</h1><p class="lede">Report what happened, not what you think the instruction meant. Leave numeric details blank only if you select “I am not sure”.</p></div>
+<div class="form-layout">
+<section class="panel form-panel">
+  {% if assignments %}<form method="post" class="stack-form patient-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Which assigned medication?<select name="assignment_id" required>{% for assignment in assignments %}<option value="{{ assignment.id }}" {{ 'selected' if selected|string == assignment.id|string }}>{{ assignment.medication_name }} · instruction v{{ assignment.version_number }}</option>{% endfor %}</select></label>
+    <label>Date you took it<input type="date" name="reported_usage_date" max="{{ today }}" value="{{ today }}" required></label>
+    <div class="form-grid"><label>How many times did you take it?<input type="number" name="number_of_doses" min="0" max="48" inputmode="numeric" placeholder="e.g. 1"></label><label>How many each time?<input type="number" name="quantity_per_dose" min="0.01" max="100" step="0.01" inputmode="decimal" placeholder="e.g. 1"></label></div>
+    <label>Approximate timing, if known<input name="timing_information" placeholder="e.g. around 8am, or morning and evening"></label>
+    <label>Describe what you actually did<textarea name="explanation" rows="5" placeholder="e.g. I took one tablet after breakfast."></textarea></label>
+    <label class="check-label"><input type="checkbox" name="uncertain" value="1"><span><strong>I am not sure or cannot remember all the details</strong><small>You do not have to guess. The report will be marked for clinician review.</small></span></label>
+    <div class="safety-note"><strong>Before submitting:</strong> this comparison cannot tell you what to take next and does not replace professional advice.</div>
+    <button class="btn large-action">Submit report and compare</button>
+  </form>{% else %}<div class="empty-state"><strong>No active assignment</strong><span>Your clinician must assign approved instructions before you can report use.</span></div>{% endif %}
+</section>
+<aside class="panel process-panel"><span class="eyebrow">What happens next</span><ol class="process-list"><li><span>1</span><p>Your report is stored with the exact current instruction version.</p></li><li><span>2</span><p>Explicit dose and frequency values are compared deterministically.</p></li><li><span>3</span><p>Any difference, uncertainty, or technical failure is shown for human review.</p></li></ol></aside>
+</div>
+{% endblock %}

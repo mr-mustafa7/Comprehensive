@@ -22,6 +22,7 @@ error here would make any check meaningless, so review it carefully.</p>
 <div class="step-card">
   <div class="body">
     <form method="post" action="{{ url_for('upload_run') }}" class="review-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <label>Document title
         <input name="title" value="{{ title }}" required>
       </label>

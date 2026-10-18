@@ -20,6 +20,7 @@ no patient is involved, and nothing about a real person is stored.</p>
 <div class="step-card">
   <div class="body">
     <form method="post" action="{{ url_for('upload_transcribe') }}" enctype="multipart/form-data" class="review-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <label>Document title (optional)
         <input name="title" placeholder="e.g. Ibuprofen gel, box leaflet">
       </label>

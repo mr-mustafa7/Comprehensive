@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{% block title %}Comprehension-Gap Checker{% endblock %}</title>
+<title>{% block title %}Comprehensive{% endblock %}</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -12,17 +12,32 @@
 
 <header class="masthead">
   <div class="masthead-inner">
-    <a class="brand" href="{{ url_for('index') }}">Comprehension-Gap Checker</a>
+    <a class="brand" href="{{ url_for('home') }}"><span class="brand-mark">C</span><span>Comprehensive</span></a>
+    {% if current_user %}
     <nav aria-label="Primary">
-      <a class="nav-pill" href="{{ url_for('index') }}" {{ 'aria-current="page"' if active == 'index' else '' }}>Run a document</a>
-      <a class="nav-pill" href="{{ url_for('queue') }}" {{ 'aria-current="page"' if active == 'queue' else '' }}>Review queue{% if pending_count %} <span class="nav-count">{{ pending_count }}</span>{% endif %}</a>
-      <a class="nav-pill" href="{{ url_for('governance') }}" {{ 'aria-current="page"' if active == 'governance' else '' }}>Governance</a>
-      <a class="nav-pill" href="{{ url_for('eval_page') }}" {{ 'aria-current="page"' if active == 'eval' else '' }}>Evaluation results</a>
+      {% if current_user.role == 'clinician' %}
+      <a class="nav-pill" href="{{ url_for('clinical.clinician_dashboard') }}" {{ 'aria-current="page"' if active == 'clinician' else '' }}>Dashboard</a>
+      <a class="nav-pill" href="{{ url_for('clinical.documents') }}" {{ 'aria-current="page"' if active == 'documents' else '' }}>Instructions</a>
+      <a class="nav-pill secondary-nav" href="{{ url_for('clinical.usage_evaluation') }}" {{ 'aria-current="page"' if active == 'evaluation' else '' }}>Usage evaluation</a>
+      <a class="nav-pill secondary-nav" href="{{ url_for('index') }}" {{ 'aria-current="page"' if active == 'index' else '' }}>Pre-release testing</a>
+      <a class="nav-pill secondary-nav" href="{{ url_for('queue') }}" {{ 'aria-current="page"' if active == 'queue' else '' }}>Test queue{% if pending_count %} <span class="nav-count">{{ pending_count }}</span>{% endif %}</a>
+      {% else %}
+      <a class="nav-pill" href="{{ url_for('clinical.patient_dashboard') }}" {{ 'aria-current="page"' if active == 'patient' else '' }}>My medicines</a>
+      <a class="nav-pill" href="{{ url_for('clinical.patient_report') }}">Report use</a>
+      {% endif %}
+      <form method="post" action="{{ url_for('clinical.logout') }}" class="nav-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="nav-pill nav-button" type="submit">Sign out</button>
+      </form>
     </nav>
+    {% endif %}
   </div>
 </header>
 
 <main id="main" class="shell">
+  {% for category, message in get_flashed_messages(with_categories=true) %}
+  <div class="flash {{ category }}" role="{{ 'alert' if category == 'error' else 'status' }}">{{ message }}</div>
+  {% endfor %}
   {% block content %}{% endblock %}
 </main>
 

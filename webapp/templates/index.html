@@ -3,7 +3,7 @@
 {% block content %}
 
 <h1>Run a document</h1>
-<p class="lede">Pick a document, then 1 reader or the reader panel. Flagged checks go to the <a href="{{ url_for('queue') }}">review queue</a>. <a href="{{ url_for('eval_page') }}">How this works and what it's measured at →</a></p>
+<p class="lede">Pick a document, then 1 reader or the reader panel. Flagged checks go to the <a href="{{ url_for('queue') }}">review queue</a>. <a href="{{ url_for('governance') }}">Governance</a> · <a href="{{ url_for('eval_page') }}">historical evaluation results →</a></p>
 
 {% macro doc_list(docs) %}
 <div class="doc-grid">
@@ -20,6 +20,7 @@
         <span class="chip real">real, unmodified</span>
       {% endif %}
       <form method="post" action="{{ url_for('start') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <input type="hidden" name="doc_id" value="{{ d.doc_id }}">
         <button class="btn ghost" name="mode" value="single" aria-label="Run 1 reader on {{ d.title }}">1 reader</button>
         <button class="btn" name="mode" value="panel" aria-label="Run reader panel on {{ d.title }}">Reader panel →</button>

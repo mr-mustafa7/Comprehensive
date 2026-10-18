@@ -13,12 +13,14 @@ Run with: .venv/bin/python -m webapp.app
 
 import csv
 import hashlib
+import os
+import secrets
 import sys
 import time
 from datetime import date
 from pathlib import Path
 
-from flask import Flask, Response, abort, jsonify, redirect, render_template, request, url_for
+from flask import Flask, Response, abort, g, jsonify, redirect, render_template, request, url_for
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
@@ -26,8 +28,9 @@ sys.path.insert(0, str(ROOT))
 from src.documents import read_body  # noqa: E402
 from src.ocr import TranscriptionError, transcribe  # noqa: E402
 from src.panel import PERSONAS  # noqa: E402
-from webapp import jobs, patient_view, store  # noqa: E402
+from webapp import clinical, clinical_store, jobs, patient_view, store  # noqa: E402
 from webapp.highlight import highlight  # noqa: E402
+from webapp.security import init_security, role_required  # noqa: E402
 
 ALLOWED_IMAGE_TYPES = {
     "image/png": "png", "image/jpeg": "jpg", "image/jpg": "jpg",
@@ -42,6 +45,14 @@ PANEL_SUMMARY_CSV = ROOT / "outputs" / "panel_summary.csv"
 PANEL_RESULTS_CSV = ROOT / "outputs" / "panel_results.csv"
 
 app = Flask(__name__)
+app.config.update(
+    SECRET_KEY=os.environ.get("COMPREHENSIVE_SECRET_KEY") or secrets.token_hex(32),
+    MAX_CONTENT_LENGTH=MAX_UPLOAD_BYTES,
+    USAGE_INFERENCE_PROVIDER=os.environ.get("COMPREHENSIVE_USAGE_MODEL", "rules").lower(),
+)
+init_security(app)
+app.register_blueprint(clinical.bp)
+clinical_store.seed_demo_data()
 
 
 def _read_csv(path: Path) -> list[dict]:
@@ -62,10 +73,20 @@ def _find_document(doc_id: str) -> dict | None:
 @app.context_processor
 def queue_count():
     pending = sum(1 for r in store.list_runs() if r["status"] == store.PENDING)
-    return {"pending_count": pending}
+    return {"pending_count": pending, "current_user": g.get("user")}
 
 
 @app.route("/")
+def home():
+    if g.user is None:
+        return redirect(url_for("clinical.login"))
+    if g.user["role"] == "clinician":
+        return redirect(url_for("clinical.clinician_dashboard"))
+    return redirect(url_for("clinical.patient_dashboard"))
+
+
+@app.route("/document-testing")
+@role_required("clinician")
 def index():
     documents = load_documents()
     primary = [d for d in documents if d.get("test_set") == "primary"]
@@ -75,6 +96,7 @@ def index():
 
 
 @app.route("/start", methods=["POST"])
+@role_required("clinician")
 def start():
     doc = _find_document(request.form.get("doc_id", ""))
     if doc is None:
@@ -88,11 +110,13 @@ def start():
 
 
 @app.route("/upload")
+@role_required("clinician")
 def upload_form():
     return render_template("upload.html", active="index", error=request.args.get("error"))
 
 
 @app.route("/upload", methods=["POST"])
+@role_required("clinician")
 def upload_transcribe():
     file = request.files.get("image")
     if not file or not file.filename:
@@ -120,6 +144,7 @@ def upload_transcribe():
 
 
 @app.route("/upload/run", methods=["POST"])
+@role_required("clinician")
 def upload_run():
     title = request.form.get("title", "").strip() or "Uploaded document"
     text = request.form.get("text", "").replace("\r\n", "\n").strip()
@@ -139,6 +164,7 @@ def upload_run():
 
 
 @app.route("/job/<job_id>")
+@role_required("clinician")
 def job_page(job_id):
     job = jobs.status(job_id)
     if job is None:
@@ -148,6 +174,7 @@ def job_page(job_id):
 
 
 @app.route("/job/<job_id>/status")
+@role_required("clinician")
 def job_status(job_id):
     job = jobs.status(job_id)
     if job is None:
@@ -166,6 +193,7 @@ def _blamed_phrases(run: dict) -> list[tuple[str, str]]:
 
 
 @app.route("/run/<int:run_id>")
+@role_required("clinician")
 def run_page(run_id):
     run = store.get_run(run_id)
     if run is None:
@@ -187,6 +215,7 @@ def run_page(run_id):
 
 
 @app.route("/run/<int:run_id>/decide", methods=["POST"])
+@role_required("clinician")
 def decide(run_id):
     run = store.get_run(run_id)
     if run is None:
@@ -205,6 +234,7 @@ def decide(run_id):
 
 
 @app.route("/run/<int:run_id>/retest", methods=["POST"])
+@role_required("clinician")
 def retest(run_id):
     """A reviewer's own edit to the source is checked again with the same mode.
 
@@ -234,6 +264,7 @@ def retest(run_id):
 
 
 @app.route("/queue")
+@role_required("clinician")
 def queue():
     runs = store.list_runs()
     pending = [r for r in runs if r["status"] == store.PENDING]
@@ -244,6 +275,7 @@ def queue():
 
 
 @app.route("/run/<int:run_id>/patient-view")
+@role_required("clinician")
 def patient_view_page(run_id):
     run = store.get_run(run_id)
     if run is None:
@@ -253,6 +285,7 @@ def patient_view_page(run_id):
 
 
 @app.route("/governance")
+@role_required("clinician")
 def governance():
     return render_template("governance.html", stats=store.governance_stats(),
                            store_runs=store.list_runs(), active="governance")
@@ -311,6 +344,7 @@ def _audit_record_text(run: dict, decisions: list[dict]) -> str:
 
 
 @app.route("/run/<int:run_id>/audit")
+@role_required("clinician")
 def audit_record(run_id):
     run = store.get_run(run_id)
     if run is None:
@@ -324,6 +358,7 @@ def audit_record(run_id):
 
 
 @app.route("/eval")
+@role_required("clinician")
 def eval_page():
     return render_template(
         "eval.html",
